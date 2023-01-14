@@ -72,8 +72,8 @@ public class Robot extends TimedRobot {
     controlInputs.readControls();
 
     driveTrain.arcadeDrive(
-      controlInputs.driveStickY*forwardPower,
-      -controlInputs.driveStickX*turnPower);
+      -controlInputs.driveStickY*forwardPower,
+      controlInputs.driveStickX*turnPower);
   }
 
   /** This function is called once when the robot is disabled. */
