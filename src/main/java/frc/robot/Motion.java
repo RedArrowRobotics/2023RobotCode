@@ -23,7 +23,7 @@ public class Motion {
 
     /*
         Returns a double with an output range of [-1.0, 1.0] as the motor power by changing the target distance to be along
-        a polynomial according to the current time of the move
+        a polynomial curve according to the current time of the move
     */
     public double getPower(double currentPosition, double currentTime){
         double targetPosition = distance * polynomial345(currentTime / timeMax);
