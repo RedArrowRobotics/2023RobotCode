@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    
     SmartDashboard.putStringArray("Auto List", 
       new String[]{
         kAutoModeNull,

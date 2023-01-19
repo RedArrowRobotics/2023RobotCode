@@ -6,14 +6,12 @@ import frc.robot.SensorInputs;
 import edu.wpi.first.wpilibj.Relay;
 
 public class AutoActionFlipper extends AutoAction {
-    private int count;
-    private Components comp;
+    private int count = 0;
+    private Components comp = new Components();
 
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        comp = new Components();
         comp.autoFlipPlatform.set(Relay.Value.kOn);
-        count = 0;
     }
 
     @Override
