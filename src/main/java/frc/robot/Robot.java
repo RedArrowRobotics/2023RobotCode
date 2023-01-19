@@ -8,8 +8,9 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Auto.AutoAction;
 
+//Auto Imports
+import frc.robot.Auto.AutoAction;
 import frc.robot.Auto.AutoActionDoNothing;
 import frc.robot.Auto.AutoActionCrossCommunity;
 import frc.robot.Auto.AutoActionFlipper;

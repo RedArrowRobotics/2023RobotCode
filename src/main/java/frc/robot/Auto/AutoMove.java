@@ -3,6 +3,7 @@ package frc.robot.Auto;
 import frc.robot.DriveTrain;
 import frc.robot.Motion;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoMove {
     
@@ -26,6 +27,9 @@ public class AutoMove {
         rotationsToTravel = inchesToTravel * gearRatio / (Math.PI * wheelDiameter);
         timeStarted = Timer.getFPGATimestamp();
         
+        //Smart Dashboard Output
+        SmartDashboard.putNumber("Auto Rotations To Travel", rotationsToTravel);
+
         //Class Defintion/Initialize
         motion = new Motion(maxTime, rotationsToTravel, toleranceInEncoderCount, scaler);
     }
@@ -37,6 +41,10 @@ public class AutoMove {
         currentTime = ((Timer.getFPGATimestamp()) - timeStarted);
         power = motion.getPower(currentPosition, currentTime);
         
+        //Smart Dashboard Output
+        SmartDashboard.putNumber("Auto Left Current Position", driveTrain.getFrontLeftPosition());
+        SmartDashboard.putNumber("Auto Right Current Position", driveTrain.getFrontRightPosition());
+
         //Control drivetrain
         driveTrain.arcadeDrive(power, 0);
 
