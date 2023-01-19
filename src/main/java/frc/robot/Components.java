@@ -14,7 +14,7 @@ public class Components {
     public final TalonSRX mainSideBelt = new TalonSRX(6);
     public final CANSparkMax intakeRotationMotor = new CANSparkMax(6, MotorType.kBrushless);
     public final Solenoid intakeArmClamp = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-    public final Relay autoFlipPlatform = new Relay(0);
+    public final Relay autoFlipPlatform = new Relay(0, Relay.Direction.kForward);
 
     public final Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
 }

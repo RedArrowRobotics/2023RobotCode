@@ -4,7 +4,15 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Auto.AutoAction;
+
+import frc.robot.Auto.AutoActionDoNothing;
+import frc.robot.Auto.AutoActionCrossCommunity;
+import frc.robot.Auto.AutoActionFlipper;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,10 +25,18 @@ public class Robot extends TimedRobot {
   //Class Initiation
   private final DriveTrain driveTrain = new DriveTrain();
   private final ControlInputs controlInputs = new ControlInputs();
+  private final SensorInputs sensorInputs = new SensorInputs();
+  private Components components = new Components();
   
   //Variable Initiation
   private double forwardPower = 1.0;
   private double turnPower = 1.0;
+
+  //Auto Variable Initiation
+  private String autoSelected;
+  private final String kAutoModeNull = "Do Nothing";
+  private final String kAutoCrossCommunity = "Cross Community";
+  private ArrayList<AutoAction> autonomousSequence;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -28,7 +44,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-
+    SmartDashboard.putStringArray("Auto List", 
+      new String[]{
+        kAutoModeNull,
+        kAutoCrossCommunity,
+      });
   }
 
   /**
@@ -53,13 +73,37 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
+    
+    autonomousSequence = new ArrayList<AutoAction>();
+    autoSelected = SmartDashboard.getString("Auto Selector", kAutoModeNull);
+    switch (autoSelected) {
+      case kAutoCrossCommunity:
+        autonomousSequence.add(new AutoActionCrossCommunity());
+        break;
+      default:
+        autonomousSequence.add(new AutoActionDoNothing());
+        break;
+    }
+    autonomousSequence.get(0).Init(driveTrain, components, sensorInputs);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
 
+    if (autonomousSequence.size() > 0) {
+      if (autonomousSequence.get(0).Execute(driveTrain, components, sensorInputs)) {
+        autonomousSequence.get(0).Finalize(driveTrain, components, sensorInputs);
+        autonomousSequence.remove(0);
+        if (autonomousSequence.size() > 0) {
+          autonomousSequence.get(0).Init(driveTrain, components, sensorInputs);
+        }
+      }
+    }
+    else
+    {
+      driveTrain.arcadeDrive(0.0, 0.0);
+    }
   }
 
   /** This function is called once when teleop is enabled. */
