@@ -16,6 +16,7 @@ public class AutoActionFlipper extends AutoAction {
 
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
+        driveTrain.arcadeDrive(0, 0);
         if (count < 20){
             count++;
             return false;

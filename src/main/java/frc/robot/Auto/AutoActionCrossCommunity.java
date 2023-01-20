@@ -12,18 +12,18 @@ public class AutoActionCrossCommunity extends AutoAction {
     */
 
     //Time in seconds to execute the move
-    private double maxTime = 0.0;
+    private double maxTime = 5.0;
 
     //Distance of move (edge of community) in inches
-    private double distance = 139.0;
+    private double distance = 142.0;
 
-    private double toleranceInches = 6.0;
+    private double toleranceInches = 2.0;
     
     //Allowable tolerance (error) of the error in encoder counts
     private double tolerance = toleranceInches * 12.75 / (Math.PI * 6);
 
     //Scaler constant applied to the power output
-    private double moveK = 1.0;
+    private double moveK = 0.07;
 
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
@@ -32,7 +32,7 @@ public class AutoActionCrossCommunity extends AutoAction {
 
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        return auto.MoveExecute();
+        return auto.MoveExecute(driveTrain);
     }
 
     @Override

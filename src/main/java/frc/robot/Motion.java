@@ -2,7 +2,7 @@ package frc.robot;
 
 public class Motion {
 
-    // Scaler value that will be applied to the power output
+    // Scaler value that will be applied to the power output (significantly less then one)
     private double moveConstant;
 
     // Total time of the move in seconds
@@ -15,10 +15,10 @@ public class Motion {
     private double tolerance;
 
     public Motion (double time, double dist, double tol, double moveK){
-        this.timeMax = time;
-        this.distance = dist;
-        this.tolerance = tol;
-        this.moveConstant = moveK;
+        timeMax = time;
+        distance = dist;
+        tolerance = tol;
+        moveConstant = moveK;
     }
 
     /*

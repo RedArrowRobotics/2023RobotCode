@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutoMove {
     
     //Class Defintions
-    private final DriveTrain driveTrain = new DriveTrain();
     private Motion motion;
 
     //Variable Defintions
@@ -34,7 +33,7 @@ public class AutoMove {
         motion = new Motion(maxTime, rotationsToTravel, toleranceInEncoderCount, scaler);
     }
 
-    public final boolean MoveExecute() {
+    public final boolean MoveExecute(DriveTrain driveTrain) {
         
         //Variable Defintions
         double currentPosition = driveTrain.getFrontLeftPosition();

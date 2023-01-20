@@ -23,6 +23,7 @@ public class AutoActionWait extends AutoAction {
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
         cycleCount++;
+        driveTrain.arcadeDrive(0, 0);
         return (cycleCount > maxCount);
     }
 

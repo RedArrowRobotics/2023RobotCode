@@ -10,7 +10,6 @@ public class AutoActionDoNothing extends AutoAction {
     
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensors) {
-        components.compressor.enableDigital();
         driveTrain.arcadeDrive(0.0, 0.0);
         return false;
     }
