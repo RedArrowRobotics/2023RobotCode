@@ -14,13 +14,14 @@ public class Motion {
     // The max distance that the encoder value can be away from the specified distance
     private double tolerance;
 
-    public Motion (double time, double dist, double tol, double moveK){
+    public Motion(double time, double dist, double tol, double moveK){
         timeMax = time;
         distance = dist;
         tolerance = tol;
         moveConstant = moveK;
+        //moveConstant = 2/dist;
     }
-
+    
     /*
         Returns a double with an output range of [-1.0, 1.0] as the motor power by changing the target distance to be along
         a polynomial curve according to the current time of the move

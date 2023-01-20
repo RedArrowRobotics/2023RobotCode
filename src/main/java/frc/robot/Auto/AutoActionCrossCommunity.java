@@ -12,7 +12,7 @@ public class AutoActionCrossCommunity extends AutoAction {
     */
 
     //Time in seconds to execute the move
-    private double maxTime = 5.0;
+    private double maxTime = 2.0;
 
     //Distance of move (edge of community) in inches
     private double distance = 142.0;
@@ -23,7 +23,7 @@ public class AutoActionCrossCommunity extends AutoAction {
     private double tolerance = toleranceInches * 12.75 / (Math.PI * 6);
 
     //Scaler constant applied to the power output
-    private double moveK = 0.07;
+    private double moveK = 0.18;
 
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {

@@ -43,6 +43,7 @@ public class AutoMove {
         //Smart Dashboard Output
         SmartDashboard.putNumber("Auto Left Current Position", driveTrain.getFrontLeftPosition());
         SmartDashboard.putNumber("Auto Right Current Position", driveTrain.getFrontRightPosition());
+        SmartDashboard.putNumber("Auto Motor Power", power);
 
         //Control drivetrain
         driveTrain.arcadeDrive(power, 0);

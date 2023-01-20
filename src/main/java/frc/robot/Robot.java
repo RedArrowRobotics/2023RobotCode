@@ -7,6 +7,7 @@ package frc.robot;
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //Auto Imports
@@ -28,7 +29,7 @@ public class Robot extends TimedRobot {
   private final ControlInputs controlInputs = new ControlInputs();
   private final SensorInputs sensorInputs = new SensorInputs();
   private Components components = new Components();
-  
+
   //Variable Initiation
   private double forwardPower = 1.0;
   private double turnPower = 1.0;
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
   private final String kAutoModeNull = "Do Nothing";
   private final String kAutoCrossCommunity = "Cross Community";
   private ArrayList<AutoAction> autonomousSequence;
+  private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -47,11 +49,16 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     
     components.compressor.enableDigital();
-    SmartDashboard.putStringArray("Auto List", 
-      new String[]{
-        kAutoModeNull,
-        kAutoCrossCommunity,
-      });
+
+    //Drivetrain Setup
+    driveTrain.resetEncoders();
+
+    //Auto Chooser
+    auto_chooser.addOption(kAutoModeNull, kAutoModeNull);
+    auto_chooser.addOption(kAutoCrossCommunity, kAutoCrossCommunity);
+    auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
+
+    SmartDashboard.putData(auto_chooser);
   }
 
   /**
@@ -78,7 +85,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     
     autonomousSequence = new ArrayList<AutoAction>();
-    autoSelected = SmartDashboard.getString("Auto Selector", kAutoModeNull);
+    autoSelected = auto_chooser.getSelected();
     switch (autoSelected) {
       case kAutoCrossCommunity:
         autonomousSequence.add(new AutoActionCrossCommunity());
