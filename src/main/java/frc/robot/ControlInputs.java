@@ -16,6 +16,7 @@ public class ControlInputs {
 
     //Reading the controls
     public final void readControls() {
+        
         driveStickX = driveStick.getX();
         driveStickY = driveStick.getY();
     }

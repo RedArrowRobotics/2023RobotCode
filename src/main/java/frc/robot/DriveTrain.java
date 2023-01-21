@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveTrain {
+  
   private final CANSparkMax driveFrontLeft = new CANSparkMax(1, MotorType.kBrushless);
   private final CANSparkMax driveRearLeft = new CANSparkMax(2, MotorType.kBrushless);
   //private final MotorControllerGroup driveLeft = new MotorControllerGroup(driveFrontLeft, driveRearLeft);
@@ -16,8 +17,8 @@ public class DriveTrain {
   //private final DifferentialDrive robotDrive = new DifferentialDrive(driveLeft, driveRight);
   private final DifferentialDrive robotDrive = new DifferentialDrive(driveFrontLeft, driveFrontRight);
 
-  public DriveTrain()
-  {
+  public DriveTrain() {
+
     driveRearRight.follow(driveFrontRight, false);
     driveRearLeft.follow(driveFrontLeft, false);
 
@@ -28,18 +29,24 @@ public class DriveTrain {
     driveRearRight.setInverted(false);
   }
 
-  public void arcadeDrive(double xSpeed, double zRotation )
-  {
+  public void arcadeDrive(double xSpeed, double zRotation ) {
     robotDrive.arcadeDrive(xSpeed, zRotation, true);
   }
 
-  public double getFrontLeftPosition()
-  {
-      return driveFrontLeft.getEncoder().getPosition();
+  public double getFrontLeftPosition() {
+    return driveFrontLeft.getEncoder().getPosition();
   }
 
-  public double getFrontRightPosition()
-  {
-      return driveFrontRight.getEncoder().getPosition();
+  public double getFrontRightPosition() {
+    return driveFrontRight.getEncoder().getPosition();
+  }
+
+  public void resetEncoders() {
+    //Left
+    driveFrontLeft.getEncoder().setPosition(0);
+    driveRearLeft.getEncoder().setPosition(0);
+    //Right
+    driveFrontRight.getEncoder().setPosition(0);
+    driveRearRight.getEncoder().setPosition(0);
   }
 }
