@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
   //Variable Initiation
   private double forwardPower = 1.0;
   private double turnPower = 1.0;
+  //private double speed = 0.0;
 
   //Auto Variable Initiation
   private String autoSelected;
@@ -124,6 +125,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     controlInputs.readControls();
+
+    /*if (controlInputs.speedButton) {
+      if (speed < 1.0) {speed += 0.1;}
+    }
+    else
+    {
+      speed = 0.0;
+    }
+    driveTrain.arcadeDrive(speed, 0);
+    SmartDashboard.putNumber("Speed", speed);
+    SmartDashboard.putNumber("Vel", driveTrain.motorVel());*/
 
     driveTrain.arcadeDrive(
       -controlInputs.driveStickY*forwardPower,

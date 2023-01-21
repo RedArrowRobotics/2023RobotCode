@@ -49,4 +49,8 @@ public class DriveTrain {
     driveFrontRight.getEncoder().setPosition(0);
     driveRearRight.getEncoder().setPosition(0);
   }
+
+  public double motorVel() {
+    return driveFrontLeft.getEncoder().getVelocity();
+  }
 }

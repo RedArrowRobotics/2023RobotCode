@@ -13,11 +13,13 @@ public class ControlInputs {
     //Variable Defintions
     public double driveStickX = 0.0;
     public double driveStickY = 0.0;
+    public boolean speedButton = false;
 
     //Reading the controls
     public final void readControls() {
         
         driveStickX = driveStick.getX();
         driveStickY = driveStick.getY();
+        speedButton = driveStick.getRawButton(12);
     }
 }
