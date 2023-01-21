@@ -31,7 +31,6 @@ public class Motion {
         return getFeedbackPower(currentPosition, targetPosition);
     }
     
-    
     private double polynomial345(double time) {
         return (10 * Math.pow(time, 3.0)) - (15 * Math.pow(time, 4.0)) + (6 * Math.pow(time, 5.0));
     }
@@ -50,13 +49,25 @@ public class Motion {
             return power;
         }
     }
+    public double getFeedbackPower(double currentPosition, double targetPosition, double moveConstant){
+        double power = moveConstant * Math.sqrt(Math.abs(targetPosition - currentPosition));
+        if (targetPosition - currentPosition < 0.0){
+            power *= -1.0;
+        }
+        if (power < -1.0){
+            return -1.0;
+        } else if (power > 1.0){
+            return 1.0;
+        } else {
+            return power;
+        }
+    }
 
     /*
         Boolean value that is true if either the current time of the move is greater than the max time of the move,
         or if the distance away from the target position is within the tolerance of error for the position
     */
-        public boolean isDone (double currentPosition, double currentTime){
+    public boolean isDone (double currentPosition, double currentTime){
         return (currentTime > timeMax) || (Math.abs(currentPosition - distance) < tolerance);
     }
-    
 }

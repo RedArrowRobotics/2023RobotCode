@@ -23,7 +23,7 @@ public class AutoActionCrossCommunity extends AutoAction {
     private double tolerance = toleranceInches * 12.75 / (Math.PI * 6);
 
     //Scaler constant applied to the power output
-    private double moveK = 0.18;
+    private double moveK = 0.25;
 
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
