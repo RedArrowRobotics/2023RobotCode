@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.Relay;
 public class Components {
     
     //Components Definitions
-    //public final TalonSRX mainSideBelt = new TalonSRX(6);
-    //public final CANSparkMax intakeRotationMotor = new CANSparkMax(5, MotorType.kBrushless);
+    public final TalonSRX mainSideBelt = new TalonSRX(6);
+    public final CANSparkMax intakeRotationMotor = new CANSparkMax(5, MotorType.kBrushless);
     public final Solenoid intakeArmClamp = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
     public final Relay autoFlipPlatform = new Relay(0, Relay.Direction.kForward);
 

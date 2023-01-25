@@ -12,6 +12,8 @@ public class ControlInputs {
     //Buttons IDs
     private final int beltLeftId = 12;
     private final int beltRightId = 11;
+    private final int intakeOutId = 10;
+    private final int intakeClampId = 9;
 
     //Joystick Definitions
     private final Joystick driveStick = new Joystick(driveStickDeviceId);
@@ -24,6 +26,8 @@ public class ControlInputs {
     //public boolean speedButton = false;
     public boolean beltLeft = false;
     public boolean beltRight = false;
+    public boolean intakeOut = false;
+    public boolean intakeClamp = false;
 
     //Reading the controls
     public final void readControls() {
@@ -36,5 +40,7 @@ public class ControlInputs {
         //speedButton = driveStick.getRawButton(12);
         beltLeft = mechanismStickRight.getRawButton(beltLeftId);
         beltRight = mechanismStickRight.getRawButton(beltRightId);
+        intakeOut = mechanismStickRight.getRawButton(intakeOutId);
+        intakeClamp = mechanismStickRight.getRawButton(intakeClampId);
     }
 }
