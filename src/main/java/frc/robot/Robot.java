@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //Auto Imports
 import frc.robot.Auto.AutoAction;
+import frc.robot.Auto.AutoActionClimbPlatform;
 import frc.robot.Auto.AutoActionDoNothing;
 import frc.robot.Auto.AutoActionCrossCommunity;
 import frc.robot.Auto.AutoActionFlipper;
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
   private String autoSelected;
   private final String kAutoModeNull = "Do Nothing";
   private final String kAutoCrossCommunity = "Cross Community";
+  private final String kNavxTest = "NavX Test";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -56,6 +58,7 @@ public class Robot extends TimedRobot {
     //Auto Chooser
     auto_chooser.addOption(kAutoModeNull, kAutoModeNull);
     auto_chooser.addOption(kAutoCrossCommunity, kAutoCrossCommunity);
+    auto_chooser.addOption(kNavxTest, kNavxTest);
     auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
 
     SmartDashboard.putData(auto_chooser);
@@ -90,6 +93,9 @@ public class Robot extends TimedRobot {
       case kAutoCrossCommunity:
         autonomousSequence.add(new AutoActionCrossCommunity());
         break;
+      case kNavxTest:
+        autonomousSequence.add(new AutoActionClimbPlatform());
+        break;
       default:
         autonomousSequence.add(new AutoActionDoNothing());
         break;
@@ -102,6 +108,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
 
     if (autonomousSequence.size() > 0) {
+      sensorInputs.readSensors();
       if (autonomousSequence.get(0).Execute(driveTrain, components, sensorInputs)) {
         autonomousSequence.get(0).Finalize(driveTrain, components, sensorInputs);
         autonomousSequence.remove(0);
@@ -110,8 +117,7 @@ public class Robot extends TimedRobot {
         }
       }
     }
-    else
-    {
+    else {
       driveTrain.arcadeDrive(0.0, 0.0);
     }
   }
