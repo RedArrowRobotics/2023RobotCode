@@ -14,10 +14,14 @@ public class AutoActionClimbPlatform extends AutoAction {
 
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        float currentPitch = sensor.currentPitch;
+        float currentPitch = sensor.currentPitchDegrees;
         if (currentPitch > 10)
         {
             driveTrain.arcadeDrive(.4, 0);
+        }
+        if (currentPitch < -10)
+        {
+            driveTrain.arcadeDrive(-.4, 0);
         }
         if (currentPitch < .5 && currentPitch > -.5)
         {

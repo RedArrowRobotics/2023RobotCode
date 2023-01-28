@@ -18,14 +18,21 @@ public class SensorInputs {
     public boolean intakeLimitDown = false;
     public boolean intakeLimitUp = false;
 
-    public float currentPitch = (float) 0.0; 
+    public float currentPitchDegrees = (float) 0.0;
+    public float currentYawDegrees = (float)0.0;
+    public float currentRollDegrees = (float)0.0; 
 
     //Reading the sensors
     public final void readSensors() {
         
         intakeLimitDown = intakeLimitSwitchDown.get();
         intakeLimitUp = intakeLimitSwitchUp.get();
-        currentPitch = navxAhrs.getPitch();
-        SmartDashboard.putNumber("NavX Pitch", currentPitch);
+        currentPitchDegrees = navxAhrs.getPitch();
+        currentYawDegrees = navxAhrs.getYaw();
+        currentRollDegrees = navxAhrs.getRoll();
+        SmartDashboard.putNumber("NavX Pitch", currentPitchDegrees);
+        SmartDashboard.putNumber("NavX Yaw", currentYawDegrees);
+        SmartDashboard.putNumber("NavX Roll", currentRollDegrees);
+
     }
 }
