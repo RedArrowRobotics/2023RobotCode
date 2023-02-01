@@ -1,22 +1,33 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 public class ComponentsControl {
     
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         
         //Variable Defintions
-        Double mainSideBeltSpeed =0.0;
+        Double mainSideBeltSpeed = 0.0;
+        Boolean intakeClamp = controlInputs.intakeClamp || sensorInputs.intakePressure;
 
         //Controls
-        if (controlInputs.beltLeft) {
-            mainSideBeltSpeed = 1.0;
-        } else if (controlInputs.beltRight) {
-            mainSideBeltSpeed = -1.0;
+            //Belts
+        if (controlInputs.beltAuto) {
+
+        } else {
+            if (controlInputs.dumpBeltLeft) {
+                mainSideBeltSpeed = 1.0;
+            } else if (controlInputs.dumpBeltRight) {
+                mainSideBeltSpeed = -1.0;
+            }
         }
+            //Intake Clamping
+        if (controlInputs.intakeRelease && intakeClamp) {
+            intakeClamp = false;
+        }
+            //Intake Rotation
+
 
         //Set Components
-        components.mainSideBelt.set(ControlMode.PercentOutput, mainSideBeltSpeed);
+        components.mainSideBelt.set(mainSideBeltSpeed);
+        components.intakeArmClamp.set(intakeClamp);
     }
 }

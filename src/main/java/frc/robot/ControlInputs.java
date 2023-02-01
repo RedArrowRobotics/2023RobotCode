@@ -17,7 +17,7 @@ public class ControlInputs {
     private final int intakeReleaseId = 9;
     private final int beltsAutoId = 8;
         //Mechanism Stick Left
-    private final int intakeOutId = 12;
+    private final int intakeRotateId = 12;
 
     //Joystick Definitions
     private final Joystick driveStick = new Joystick(driveStickDeviceId);
@@ -28,11 +28,12 @@ public class ControlInputs {
     public double driveStickX = 0.0;
     public double driveStickY = 0.0;
     //public boolean speedButton = false;
-    public boolean beltLeft = false;
-    public boolean beltRight = false;
+    public boolean dumpBeltLeft = false;
+    public boolean dumpBeltRight = false;
     public boolean beltAuto = false;
-    public boolean intakeOut = false;
-    public boolean intakeClosed = false;
+    public boolean intakeRotate = false;
+    public boolean intakeClamp = false;
+    public boolean intakeRelease = false;
 
     //Reading the controls
     public final void readControls() {
@@ -44,10 +45,15 @@ public class ControlInputs {
         //Buttons
         //speedButton = driveStick.getRawButton(12);
             //Mechanism Stick Right
-        beltLeft = mechanismStickRight.getRawButton(beltLeftId);
-        beltRight = mechanismStickRight.getRawButton(beltRightId);
+        dumpBeltLeft = mechanismStickRight.getRawButton(beltLeftId);
+        dumpBeltRight = mechanismStickRight.getRawButton(beltRightId);
         beltAuto = mechanismStickRight.getRawButton(beltsAutoId);
+        intakeClamp = mechanismStickRight.getRawButton(intakeClampId);
+        intakeRelease = mechanismStickRight.getRawButton(intakeReleaseId);
             //Mechanism Stick Left
-        intakeOut = mechanismStickLeft.getRawButton(intakeReleaseId);
+        intakeRotate = mechanismStickLeft.getRawButton(intakeRotateId);
+
+        //Intake Release
+        intakeRelease = intakeRelease || beltAuto || dumpBeltLeft || dumpBeltRight;
     }
 }
