@@ -11,9 +11,7 @@ public class AutoActionClimbChargingStation extends AutoAction {
     private final double maxDrivePower = .3;
     
     @Override
-    public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        
-    }
+    public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
 
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
@@ -42,8 +40,5 @@ public class AutoActionClimbChargingStation extends AutoAction {
     }
 
     @Override
-    public void Finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        // TODO Auto-generated method stub
-        
-    }    
+    public void Finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {}    
 }

@@ -33,8 +33,6 @@ public class AutoActionDriveToChargingStation extends AutoAction {
     }
 
     @Override
-    public void Finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-       
-    }
+    public void Finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
     
 }
