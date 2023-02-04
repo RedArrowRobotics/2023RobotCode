@@ -12,8 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //Auto Imports
 import frc.robot.Auto.AutoAction;
-import frc.robot.Auto.AutoActionClimbPlatform;
+import frc.robot.Auto.AutoActionClimbChargingStation;
 import frc.robot.Auto.AutoActionDoNothing;
+import frc.robot.Auto.AutoActionDriveChargingStation;
 import frc.robot.Auto.AutoActionCrossCommunity;
 import frc.robot.Auto.AutoActionFlipper;
 
@@ -94,7 +95,9 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new AutoActionCrossCommunity());
         break;
       case kNavxTest:
-        autonomousSequence.add(new AutoActionClimbPlatform());
+        autonomousSequence.add(new AutoActionDriveChargingStation());
+        autonomousSequence.add(new AutoActionClimbChargingStation());
+        autonomousSequence.add(new AutoActionDoNothing() );
         break;
       default:
         autonomousSequence.add(new AutoActionDoNothing());
@@ -142,7 +145,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    sensorInputs.readSensors();
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
