@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
   private String autoSelected;
   private final String kAutoModeNull = "Do Nothing";
   private final String kAutoCrossCommunity = "Cross Community";
-  private final String kNavxTest = "NavX Test";
+  private final String kClimbChargingStation = "Climb Chrg Station";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
     //Auto Chooser
     auto_chooser.addOption(kAutoModeNull, kAutoModeNull);
     auto_chooser.addOption(kAutoCrossCommunity, kAutoCrossCommunity);
-    auto_chooser.addOption(kNavxTest, kNavxTest);
+    auto_chooser.addOption(kClimbChargingStation, kClimbChargingStation);
     auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
 
     SmartDashboard.putData(auto_chooser);
@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
-   *
+   *+
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
       case kAutoCrossCommunity:
         autonomousSequence.add(new AutoActionCrossCommunity());
         break;
-      case kNavxTest:
+      case kClimbChargingStation:
         autonomousSequence.add(new AutoActionDriveToChargingStation());
         autonomousSequence.add(new AutoActionClimbChargingStation());
         autonomousSequence.add(new AutoActionDoNothing() );
