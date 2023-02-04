@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.AutoAction;
 import frc.robot.Auto.AutoActionClimbChargingStation;
 import frc.robot.Auto.AutoActionDoNothing;
-import frc.robot.Auto.AutoActionDriveChargingStation;
+import frc.robot.Auto.AutoActionDriveToChargingStation;
 import frc.robot.Auto.AutoActionCrossCommunity;
 import frc.robot.Auto.AutoActionFlipper;
 
@@ -95,7 +95,7 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new AutoActionCrossCommunity());
         break;
       case kNavxTest:
-        autonomousSequence.add(new AutoActionDriveChargingStation());
+        autonomousSequence.add(new AutoActionDriveToChargingStation());
         autonomousSequence.add(new AutoActionClimbChargingStation());
         autonomousSequence.add(new AutoActionDoNothing() );
         break;

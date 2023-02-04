@@ -4,9 +4,9 @@ import frc.robot.Components;
 import frc.robot.DriveTrain;
 import frc.robot.SensorInputs;
 
-public class AutoActionDriveChargingStation extends AutoAction {
-    private double drivePower = .1;
-    private final double maxDrivePower = .3;
+public class AutoActionDriveToChargingStation extends AutoAction {
+    private double drivePower = 0;
+    private final double maxDrivePower = .25;
     private final double powerIncrementPerCycle = .025;
     private final float pitchLimit = -10;
     @Override
