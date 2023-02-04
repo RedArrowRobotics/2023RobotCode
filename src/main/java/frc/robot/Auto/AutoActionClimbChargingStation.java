@@ -8,7 +8,7 @@ public class AutoActionClimbChargingStation extends AutoAction {
     private int levelCyclesCount = 0;
     private final float outerPitchLimitInDegrees = 10;
     private final float innerPitchLimitInDegrees = .5f;
-    private final double maxDrivePower = .2;
+    private final double maxDrivePower = .3;
     
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {

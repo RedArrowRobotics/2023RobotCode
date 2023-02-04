@@ -6,8 +6,8 @@ import frc.robot.SensorInputs;
 
 public class AutoActionDriveToChargingStation extends AutoAction {
     private double drivePower = 0;
-    private final double maxDrivePower = .25;
-    private final double powerIncrementPerCycle = .025;
+    private final double maxDrivePower = .2;
+    private final double powerIncrementPerCycle = .012;
     private final float pitchLimit = -10;
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
@@ -23,7 +23,7 @@ public class AutoActionDriveToChargingStation extends AutoAction {
 
     @Override
     public void Finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        System.out.println("Found ramp");
+       
     }
     
 }
