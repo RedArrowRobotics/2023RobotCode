@@ -13,6 +13,7 @@ public class SensorInputs {
     private DigitalInput intakeLimitSwitchUp = new DigitalInput(1);
 
     private final AHRS navxAhrs = new AHRS(Port.kMXP);
+    private DigitalInput intakePressureSwitch = new DigitalInput(2);
 
     //Variable Defintions
     public boolean intakeLimitDown = false;
@@ -21,6 +22,7 @@ public class SensorInputs {
     public float currentPitchDegrees = (float) 0.0;
     public float currentYawDegrees = (float)0.0;
     public float currentRollDegrees = (float)0.0; 
+    public boolean intakePressure = false;
 
     //Reading the sensors
     public final void readSensors() {
@@ -34,5 +36,6 @@ public class SensorInputs {
         SmartDashboard.putNumber("NavX Yaw", currentYawDegrees);
         SmartDashboard.putNumber("NavX Roll", currentRollDegrees);
 
+        intakePressure = intakePressureSwitch.get();
     }
 }

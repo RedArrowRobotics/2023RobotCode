@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
   private final ControlInputs controlInputs = new ControlInputs();
   private final SensorInputs sensorInputs = new SensorInputs();
   private Components components = new Components();
+  private final ComponentsControl componentsControl = new ComponentsControl();
 
   //Variable Initiation
   private double forwardPower = 1.0;
@@ -134,6 +135,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     controlInputs.readControls();
+    sensorInputs.readSensors();
+    componentsControl.runComponents(components, controlInputs, sensorInputs);
 
     /*if (controlInputs.speedButton) {
       if (speed < 1.0) {speed += 0.1;}
