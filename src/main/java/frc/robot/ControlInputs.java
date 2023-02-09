@@ -28,8 +28,8 @@ public class ControlInputs {
     public double driveStickX = 0.0;
     public double driveStickY = 0.0;
     //public boolean speedButton = false;
-    public boolean dumpBeltLeft = false;
     public boolean dumpBeltRight = false;
+    public boolean dumpBeltLeft = false;
     public boolean beltAuto = false;
     public boolean intakeRotate = false;
     public boolean intakeClamp = false;
@@ -45,15 +45,16 @@ public class ControlInputs {
         //Buttons
         //speedButton = driveStick.getRawButton(12);
             //Mechanism Stick Right
+        
+        beltAuto = mechanismStickRight.getRawButton(beltsAutoId);
         dumpBeltLeft = mechanismStickRight.getRawButton(beltLeftId);
         dumpBeltRight = mechanismStickRight.getRawButton(beltRightId);
-        beltAuto = mechanismStickRight.getRawButton(beltsAutoId);
         intakeClamp = mechanismStickRight.getRawButton(intakeClampId);
         intakeRelease = mechanismStickRight.getRawButton(intakeReleaseId);
             //Mechanism Stick Left
         intakeRotate = mechanismStickLeft.getRawButton(intakeRotateId);
 
         //Intake Release
-        intakeRelease = intakeRelease || beltAuto || dumpBeltLeft || dumpBeltRight;
+        intakeRelease = intakeRelease || beltAuto || dumpBeltRight;
     }
 }

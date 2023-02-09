@@ -1,6 +1,8 @@
 package frc.robot;
 
 public class ComponentsControl {
+
+    private final double beltK = 0.5;
     
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         
@@ -11,12 +13,16 @@ public class ComponentsControl {
         //Controls
             //Belts
         if (controlInputs.beltAuto) {
-
+            if (sensorInputs.currentYawDegrees <= -20.0 && sensorInputs.currentYawDegrees >= -160.0){
+                mainSideBeltSpeed = beltK;
+            } else if (sensorInputs.currentYawDegrees >= 20.0 && sensorInputs.currentYawDegrees <= 160.0){
+                mainSideBeltSpeed = -beltK;
+            }
         } else {
             if (controlInputs.dumpBeltLeft) {
-                mainSideBeltSpeed = 1.0;
+                mainSideBeltSpeed = beltK;
             } else if (controlInputs.dumpBeltRight) {
-                mainSideBeltSpeed = -1.0;
+                mainSideBeltSpeed = -beltK;
             }
         }
             //Intake Clamping
