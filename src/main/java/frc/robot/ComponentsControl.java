@@ -3,6 +3,7 @@ package frc.robot;
 public class ComponentsControl {
 
     private final double beltK = 0.5;
+    private final double beltGyroRotationInsideDegreeToleranceFromY = 70; //From ±90 degrees in each direction from start point
     
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         
@@ -13,9 +14,9 @@ public class ComponentsControl {
         //Controls
             //Belts
         if (controlInputs.beltAuto) {
-            if (sensorInputs.currentYawDegrees <= -20.0 && sensorInputs.currentYawDegrees >= -160.0){
+            if (sensorInputs.currentYawDegrees <= -(90 - beltGyroRotationInsideDegreeToleranceFromY) && sensorInputs.currentYawDegrees >= -(90 + beltGyroRotationInsideDegreeToleranceFromY)) {
                 mainSideBeltSpeed = beltK;
-            } else if (sensorInputs.currentYawDegrees >= 20.0 && sensorInputs.currentYawDegrees <= 160.0){
+            } else if (sensorInputs.currentYawDegrees >= (90 - beltGyroRotationInsideDegreeToleranceFromY) && sensorInputs.currentYawDegrees <= (90 + beltGyroRotationInsideDegreeToleranceFromY)) {
                 mainSideBeltSpeed = -beltK;
             }
         } else {

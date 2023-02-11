@@ -55,6 +55,6 @@ public class ControlInputs {
         intakeRotate = mechanismStickLeft.getRawButton(intakeRotateId);
 
         //Intake Release
-        intakeRelease = intakeRelease || beltAuto || dumpBeltRight;
+        intakeRelease = intakeRelease || beltAuto || dumpBeltLeft || dumpBeltRight;
     }
 }
