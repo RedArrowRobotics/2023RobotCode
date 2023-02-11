@@ -45,7 +45,6 @@ public class ControlInputs {
         //Buttons
         //speedButton = driveStick.getRawButton(12);
             //Mechanism Stick Right
-        
         beltAuto = mechanismStickRight.getRawButton(beltsAutoId);
         dumpBeltLeft = mechanismStickRight.getRawButton(beltLeftId);
         dumpBeltRight = mechanismStickRight.getRawButton(beltRightId);

@@ -31,6 +31,8 @@ public class ComponentsControl {
             intakeClamp = false;
         }
             //Intake Rotation
+                //Positive -> Intake rotation in
+                //Negative -> Intake rotation out
 
 
         //Set Components
