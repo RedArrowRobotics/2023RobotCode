@@ -34,6 +34,7 @@ public class ControlInputs {
     public boolean intakeRotate = false;
     public boolean intakeClamp = false;
     public boolean intakeRelease = false;
+    public boolean resetEnc = false; //Remove when testing done
 
     //Reading the controls
     public final void readControls() {
@@ -55,5 +56,7 @@ public class ControlInputs {
 
         //Intake Release
         intakeRelease = intakeRelease || beltAuto || dumpBeltLeft || dumpBeltRight;
+
+        resetEnc = driveStick.getRawButton(5); //Remove when testing done
     }
 }

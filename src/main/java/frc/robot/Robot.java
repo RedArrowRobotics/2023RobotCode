@@ -138,6 +138,12 @@ public class Robot extends TimedRobot {
     sensorInputs.readSensors();
     componentsControl.runComponents(components, controlInputs, sensorInputs);
 
+    //Remove when testing done
+    SmartDashboard.putNumber("Intake Rotation Encoder", components.intakeRotationMotor.getEncoder().getPosition());
+    if (controlInputs.resetEnc) {
+      components.intakeRotationMotor.getEncoder().setPosition(0);
+    }
+
     /*if (controlInputs.speedButton) {
       if (speed < 1.0) {speed += 0.1;}
     }
