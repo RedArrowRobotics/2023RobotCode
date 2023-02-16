@@ -14,8 +14,8 @@ public class ControlInputs {
     private final int beltLeftId = 12;
     private final int beltRightId = 11;
     private final int intakeClampId = 10;
-    private final int intakeReleaseId = 9;
-    private final int beltsAutoId = 8;
+    private final int intakeReleaseId = 8;
+    private final int beltsAutoId = 9;
         //Mechanism Stick Left
     private final int intakeRotateId = 12;
 
@@ -34,7 +34,6 @@ public class ControlInputs {
     public boolean intakeRotate = false;
     public boolean intakeClamp = false;
     public boolean intakeRelease = false;
-    public boolean resetEnc = false; //Remove when testing done
 
     //Reading the controls
     public final void readControls() {
@@ -56,7 +55,5 @@ public class ControlInputs {
 
         //Intake Release
         intakeRelease = intakeRelease || beltAuto || dumpBeltLeft || dumpBeltRight;
-
-        resetEnc = driveStick.getRawButton(5); //Remove when testing done
     }
 }
