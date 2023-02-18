@@ -34,8 +34,8 @@ public class Robot extends TimedRobot {
   private final ComponentsControl componentsControl = new ComponentsControl();
 
   //Variable Initiation
-  private double forwardPower = 1.0;
-  private double turnPower = 1.0;
+  private final double forwardPower = 1.0;
+  private final double turnPower = 1.0;
   //private double speed = 0.0;
 
   //Auto Variable Initiation
@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    components.intakeEncoder.setPositionConversionFactor(8192);
+    //components.intakeEncoder.setPositionConversionFactor(8192);
 
     //Drivetrain Setup
     driveTrain.resetEncoders();

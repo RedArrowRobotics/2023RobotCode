@@ -1,43 +1,38 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Relay;
 
 public class ComponentsControl {
 
     //Belts
-    private final double beltK = -0.5;
+    private final double beltK = -0.25;
     private final double beltGyroRotationInsideDegreeToleranceFromY = 70; //From ±90 degrees in each direction from start point
     //Intake
-    private Double intakeUprightCount = 50.0;
-    private Double intakeOutCount = 100.0;
-    private Double intakeRotationSetSpeed = 0.4; //Must be a + value
-    private Double intakeRotationUprightToleranceCounts = 10.0;
+    private final double intakeUprightCount = 344.0;
+    private final double intakeOutCount = 932.0;
+    private final double intakeRotationSetSpeed = 0.4; //Must be a + value
+    private final double intakeRotationUprightToleranceCounts = 10.0;
+    private boolean intakeHomed = false;
 
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         
         //Variable Defintions
-        Double mainSideBeltSpeed = 0.0;
-        Boolean intakeClamp = controlInputs.intakeClamp || sensorInputs.intakePressure;
-        Double intakeEncoderPosition = components.intakeEncoder.getPosition(); //Assume this value is + towards out
-        Double intakeRotationSpeed = 0.0;
+        double mainSideBeltSpeed = 0.0;
+        boolean intakeClamp = controlInputs.intakeClamp;
+        int intakeEncoderPosition = components.intakeEncoder.get(); //Assume this value is + towards out
+        double intakeRotationSpeed = 0.0;
         SmartDashboard.putNumber("Intake Rotation Count", intakeEncoderPosition);
+        boolean intakeUpright = false;
 
         //Controls
-            //Belts
-        if (controlInputs.beltAuto) {
-            if (sensorInputs.currentYawDegrees <= -(90 - beltGyroRotationInsideDegreeToleranceFromY) && sensorInputs.currentYawDegrees >= -(90 + beltGyroRotationInsideDegreeToleranceFromY)) {
-                mainSideBeltSpeed = beltK;
-            } else if (sensorInputs.currentYawDegrees >= (90 - beltGyroRotationInsideDegreeToleranceFromY) && sensorInputs.currentYawDegrees <= (90 + beltGyroRotationInsideDegreeToleranceFromY)) {
-                mainSideBeltSpeed = -beltK;
-            }
-        } else {
-            if (controlInputs.dumpBeltLeft) {
-                mainSideBeltSpeed = beltK;
-            } else if (controlInputs.dumpBeltRight) {
-                mainSideBeltSpeed = -beltK;
-            }
-        }
             //Intake Clamping
+        if (intakeEncoderPosition <= (intakeUprightCount + intakeRotationUprightToleranceCounts)) {
+            intakeClamp = intakeClamp || sensorInputs.intakePressure;
+            SmartDashboard.putBoolean("Intake Pressure Button", sensorInputs.intakePressure);
+        } else {
+            SmartDashboard.putBoolean("Intake Pressure Button", false);
+        }
         if (controlInputs.intakeRelease && intakeClamp) {
             intakeClamp = false;
         }
@@ -50,7 +45,7 @@ public class ComponentsControl {
                 if (sensorInputs.intakeLimitHome == false) {
                     intakeRotationSpeed = -intakeRotationSetSpeed;
                 } else {
-                    components.intakeEncoder.setPosition(0);
+                    components.intakeEncoder.reset();
                 }
             } else {
                 //Head towards intakeUprightCount
@@ -60,6 +55,8 @@ public class ComponentsControl {
                 } else if (intakeEncoderPosition >= (intakeUprightCount + intakeRotationUprightToleranceCounts)) {
                     //Move in towards Upright
                     intakeRotationSpeed = -intakeRotationSetSpeed;
+                } else {
+                    intakeUpright = true;
                 }
             }
         } else {
@@ -68,11 +65,28 @@ public class ComponentsControl {
                 intakeRotationSpeed = intakeRotationSetSpeed;
             }
         }
-
+            //Belts
+        if (intakeUpright) {
+            if (controlInputs.beltAuto) {
+                if (sensorInputs.currentYawDegrees <= -(90 - beltGyroRotationInsideDegreeToleranceFromY) && sensorInputs.currentYawDegrees >= -(90 + beltGyroRotationInsideDegreeToleranceFromY)) {
+                    mainSideBeltSpeed = beltK;
+                } else if (sensorInputs.currentYawDegrees >= (90 - beltGyroRotationInsideDegreeToleranceFromY) && sensorInputs.currentYawDegrees <= (90 + beltGyroRotationInsideDegreeToleranceFromY)) {
+                    mainSideBeltSpeed = -beltK;
+                }
+            } else {
+                if (controlInputs.dumpBeltLeft) {
+                    mainSideBeltSpeed = beltK;
+                } else if (controlInputs.dumpBeltRight) {
+                    mainSideBeltSpeed = -beltK;
+                }
+            }
+        }
 
         //Set Components
         components.mainSideBelt.set(mainSideBeltSpeed);
         components.intakeArmClamp.set(intakeClamp);
         components.intakeRotationMotor.set(-intakeRotationSpeed);
+
+        components.autoFlipPlatform.set(controlInputs.flipper ? Relay.Value.kOn : Relay.Value.kOff);
     }
 }
