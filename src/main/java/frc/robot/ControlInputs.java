@@ -35,7 +35,9 @@ public class ControlInputs {
     public boolean intakeClamp = false;
     public boolean intakeRelease = false;
 
+    //debug
     public boolean flipper = false;
+    public boolean setHome = false;
 
     //Reading the controls
     public final void readControls() {
@@ -58,6 +60,8 @@ public class ControlInputs {
         //Intake Release
         intakeRelease = intakeRelease || beltAuto || dumpBeltLeft || dumpBeltRight;
 
+        //debug
         flipper = driveStick.getRawButton(2);
+        setHome = driveStick.getRawButton(11);
     }
 }

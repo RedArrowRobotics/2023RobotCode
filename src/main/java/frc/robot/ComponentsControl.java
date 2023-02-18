@@ -14,12 +14,13 @@ public class ComponentsControl {
     private final double intakeRotationSetSpeed = 0.4; //Must be a + value
     private final double intakeRotationUprightToleranceCounts = 10.0;
     private boolean intakeHomed = false;
+    private boolean intakePressureSet = false;
 
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         
         //Variable Defintions
         double mainSideBeltSpeed = 0.0;
-        boolean intakeClamp = controlInputs.intakeClamp;
+        boolean intakeClamp = controlInputs.intakeClamp || intakePressureSet;
         int intakeEncoderPosition = components.intakeEncoder.get(); //Assume this value is + towards out
         double intakeRotationSpeed = 0.0;
         SmartDashboard.putNumber("Intake Rotation Count", intakeEncoderPosition);
@@ -27,20 +28,21 @@ public class ComponentsControl {
 
         //Controls
             //Intake Clamping
-        if (intakeEncoderPosition <= (intakeUprightCount + intakeRotationUprightToleranceCounts)) {
-            intakeClamp = intakeClamp || sensorInputs.intakePressure;
-            SmartDashboard.putBoolean("Intake Pressure Button", sensorInputs.intakePressure);
-        } else {
-            SmartDashboard.putBoolean("Intake Pressure Button", false);
+        if (sensorInputs.intakePressure && controlInputs.intakeClamp) {
+            intakePressureSet = true;
         }
         if (controlInputs.intakeRelease && intakeClamp) {
             intakeClamp = false;
+            if (sensorInputs.intakePressure == false) {
+                intakePressureSet = false;
+            }
         }
+        SmartDashboard.putBoolean("Intake PressureSet", intakePressureSet);
             //Intake Rotation
                 //Negative -> Intake rotation towards home/in
                 //Positive -> Intake rotation towards out
         if (controlInputs.intakeRotate == false) {
-            if (sensorInputs.intakePressure) {
+            if (intakePressureSet) {
                 //Head in towards home
                 if (sensorInputs.intakeLimitHome == false) {
                     intakeRotationSpeed = -intakeRotationSetSpeed;
@@ -64,6 +66,9 @@ public class ComponentsControl {
             if (intakeEncoderPosition < intakeOutCount) {
                 intakeRotationSpeed = intakeRotationSetSpeed;
             }
+        }
+        if (controlInputs.setHome) {
+            components.intakeEncoder.reset();
         }
             //Belts
         if (intakeUpright) {
