@@ -16,8 +16,8 @@ public class Components {
     public final CANSparkMax mainSideBelt = new CANSparkMax(6, MotorType.kBrushless);
     public final CANSparkMax intakeRotationMotor = new CANSparkMax(5, MotorType.kBrushed);
     public final Solenoid intakeArmClamp = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-    public RelativeEncoder intakeEncoder = intakeRotationMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature,8192);
-    
+    public final RelativeEncoder intakeEncoder = intakeRotationMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature,8192);
+
         //Auto
     public final Relay autoFlipPlatform = new Relay(0, Relay.Direction.kForward);
 

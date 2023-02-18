@@ -53,6 +53,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
+    components.intakeEncoder.setPositionConversionFactor(8192);
+
     //Drivetrain Setup
     driveTrain.resetEncoders();
 
