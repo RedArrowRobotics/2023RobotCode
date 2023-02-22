@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Relay;
 
 public class Components {
@@ -12,9 +13,10 @@ public class Components {
     //Components Definitions
         //Teleop
     public final CANSparkMax mainSideBelt = new CANSparkMax(6, MotorType.kBrushless);
-    public final CANSparkMax intakeRotationMotor = new CANSparkMax(5, MotorType.kBrushless);
+    public final CANSparkMax intakeRotationMotor = new CANSparkMax(5, MotorType.kBrushed);
     public final Solenoid intakeArmClamp = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-    
+    public Encoder intakeEncoder = new Encoder(8, 9);
+
         //Auto
     public final Relay autoFlipPlatform = new Relay(0, Relay.Direction.kForward);
 

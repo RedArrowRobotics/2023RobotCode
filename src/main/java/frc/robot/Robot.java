@@ -34,8 +34,8 @@ public class Robot extends TimedRobot {
   private final ComponentsControl componentsControl = new ComponentsControl();
 
   //Variable Initiation
-  private double forwardPower = 1.0;
-  private double turnPower = 1.0;
+  private final double forwardPower = 1.0;
+  private final double turnPower = 1.0;
   //private double speed = 0.0;
 
   //Auto Variable Initiation
@@ -52,8 +52,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    
-    components.compressor.enableDigital();
+
+    //components.intakeEncoder.setPositionConversionFactor(8192);
 
     //Drivetrain Setup
     driveTrain.resetEncoders();
@@ -75,7 +75,9 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    components.compressor.enableDigital();
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -134,6 +136,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+
     controlInputs.readControls();
     sensorInputs.readSensors();
     componentsControl.runComponents(components, controlInputs, sensorInputs);

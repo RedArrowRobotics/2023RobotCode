@@ -14,8 +14,8 @@ public class ControlInputs {
     private final int beltLeftId = 12;
     private final int beltRightId = 11;
     private final int intakeClampId = 10;
-    private final int intakeReleaseId = 9;
-    private final int beltsAutoId = 8;
+    private final int intakeReleaseId = 8;
+    private final int beltsAutoId = 9;
         //Mechanism Stick Left
     private final int intakeRotateId = 12;
 
@@ -34,6 +34,12 @@ public class ControlInputs {
     public boolean intakeRotate = false;
     public boolean intakeClamp = false;
     public boolean intakeRelease = false;
+    public boolean intakeClampSwitchModes = false; //Switch
+    public boolean intakeEStop = false;
+
+    //debug
+    public boolean flipper = false;
+    public boolean setHome = false;
 
     //Reading the controls
     public final void readControls() {
@@ -45,16 +51,21 @@ public class ControlInputs {
         //Buttons
         //speedButton = driveStick.getRawButton(12);
             //Mechanism Stick Right
-        
         beltAuto = mechanismStickRight.getRawButton(beltsAutoId);
         dumpBeltLeft = mechanismStickRight.getRawButton(beltLeftId);
         dumpBeltRight = mechanismStickRight.getRawButton(beltRightId);
         intakeClamp = mechanismStickRight.getRawButton(intakeClampId);
         intakeRelease = mechanismStickRight.getRawButton(intakeReleaseId);
+        intakeClampSwitchModes = (mechanismStickRight.getX() >= -0.5);
             //Mechanism Stick Left
         intakeRotate = mechanismStickLeft.getRawButton(intakeRotateId);
+        intakeEStop = (mechanismStickLeft.getX() >= -0.5);
 
         //Intake Release
         intakeRelease = intakeRelease || beltAuto || dumpBeltLeft || dumpBeltRight;
+
+        //debug
+        flipper = driveStick.getRawButton(2);
+        setHome = driveStick.getRawButton(11);
     }
 }
