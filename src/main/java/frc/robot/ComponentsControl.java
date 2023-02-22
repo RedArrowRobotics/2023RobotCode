@@ -9,11 +9,11 @@ public class ComponentsControl {
     private final double beltK = -0.25;
     private final double beltGyroRotationInsideDegreeToleranceFromY = 70; //From ±90 degrees in each direction from start point
     //Intake
-    private final double intakeUprightCount = 344.0;
+    private final double intakeUprightCount = 340.0;
     private final double intakeOutCount = 932.0;
-    private final double intakeRotationSetSpeed = 0.4; //Must be a + value
-    private final double intakeRotationUprightToleranceCounts = 10.0;
-    private boolean intakeHomed = true;
+    private final double intakeRotationSetSpeed = 0.5; //Must be a + value (0.5)
+    private final double intakeRotationUprightToleranceCounts = 30.0;
+    private boolean intakeHomed = false;
     private boolean intakePressureSet = false;
     private boolean intakeEStopped = false;
 
@@ -57,8 +57,7 @@ public class ComponentsControl {
                 //Negative -> Intake rotation towards home/in
                 //Positive -> Intake rotation towards out
         if (intakeHomed) {
-            //Intake Movement Unlocked
-            SmartDashboard.putBoolean("Intake Unlocked", intakeHomed);
+            //Intake Movement Unlocked (Homed)
             if (controlInputs.intakeRotate == false) {
                 if (intakePressureSet) {
                     //Head in towards home
@@ -94,9 +93,16 @@ public class ComponentsControl {
                 }
             }
         } else {
-            //Intake Movement Locked
-            SmartDashboard.putBoolean("Intake Unlocked", intakeHomed);
+            //Intake Movement Locked (Not Homed)
+            if (sensorInputs.intakeLimitHome == false) {
+                intakeRotationSpeed = -intakeRotationSetSpeed;
+                SmartDashboard.putString("Intake Movement", "In (Homing)");
+            } else {
+                intakeHomed = true;
+                components.intakeEncoder.reset();
+            }
         }
+        SmartDashboard.putBoolean("Intake Unlocked", intakeHomed);
         if (controlInputs.setHome) {
             components.intakeEncoder.reset();
         }
