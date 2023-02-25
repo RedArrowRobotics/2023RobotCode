@@ -10,10 +10,11 @@ public class ComponentsControl {
     private final double beltGyroRotationInsideDegreeToleranceFromY = 70; //From ±90 degrees in each direction from start point
     //Intake
     private final double intakeUprightCount = 340.0;
-    private final double intakeOutCount = 932.0;
+    private final double intakeOutCount = 972.0; //932
     private final double intakeRotationSetSpeed = 0.7; //Must be a + value (0.5)
     private final double intakeRotationUprightToleranceCounts = 10.0; //30
     private final double intakePerCountConstant = (intakeRotationSetSpeed/intakeOutCount);
+    private final double intakeMinSpeed = 0.2; //Must be a + value
     private boolean intakeHomed = false;
     private boolean intakePressureSet = false;
     private boolean intakeEStopped = false;
@@ -101,6 +102,11 @@ public class ComponentsControl {
             double intakeMath = 0.0;
             if (intakeTarget != intakeEncoderPosition) {
                 intakeMath = intakePerCountConstant*intakeDistTravel;
+                if (intakeMath < 0) {
+                    intakeMath = Math.min(-intakeMinSpeed, intakeMath);
+                } else if (intakeMath > 0) {
+                    intakeMath = Math.max(intakeMinSpeed, intakeMath);
+                }
                 SmartDashboard.putNumber("Intake Math", intakeMath);
             } else {
                 intakeMath = 0.0;
@@ -109,6 +115,7 @@ public class ComponentsControl {
             double intakeMathClamped = Math.max(-intakeRotationSetSpeed, Math.min(intakeRotationSetSpeed, intakeMath));
             SmartDashboard.putNumber("Intake Math Clamped", intakeMathClamped);
             SmartDashboard.putNumber("Intake Dist Travel", intakeDistTravel);
+            intakeRotationSpeed = intakeMathClamped;
         } else {
             //Intake Movement Locked (Not Homed)
             if (sensorInputs.intakeLimitHome == false) {
