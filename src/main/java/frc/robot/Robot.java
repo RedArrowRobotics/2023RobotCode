@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
 
 //Auto Imports
 import frc.robot.Auto.AutoAction;
@@ -54,6 +55,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     //components.intakeEncoder.setPositionConversionFactor(8192);
+
+    CameraServer.startAutomaticCapture("Main Camera", 0);
 
     //Drivetrain Setup
     driveTrain.resetEncoders();
