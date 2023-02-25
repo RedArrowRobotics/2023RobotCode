@@ -39,7 +39,6 @@ public class ControlInputs {
 
     //debug
     public boolean flipper = false;
-    public boolean setHome = false;
 
     //Reading the controls
     public final void readControls() {
@@ -66,6 +65,5 @@ public class ControlInputs {
 
         //debug
         flipper = driveStick.getRawButton(2);
-        setHome = driveStick.getRawButton(11);
     }
 }

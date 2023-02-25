@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Relay;
 
 public class ComponentsControl {
 
@@ -12,9 +11,11 @@ public class ComponentsControl {
     private final double intakeUprightCount = 340.0;
     private final double intakeOutCount = 972.0;
     private final double intakeRotationUprightToleranceCounts = 30.0;
-    private final double intakeRotationMaxSpeed = 1.0; //Must be a + value (0.7)
-    private final double intakeMinSpeed = 0.5; //Must be a + value
-    private final double intakePerCountConstant = (intakeRotationMaxSpeed/intakeOutCount);
+    private final double intakeRotationMaxSpeed = 0.7; //Must be a + value
+    private final double intakeRotationMinSpeed = 0.4; //Must be a + value
+    private double intakeLastSetTarget = 0.0;
+    private double intakeStartPos = 0.0;
+    private final double intakeMotionScalerConstant = 0.06;
     private boolean intakeHomed = false;
     private boolean intakePressureSet = false;
     private boolean intakeEStopped = false;
@@ -64,10 +65,11 @@ public class ComponentsControl {
             if (controlInputs.intakeRotate == false) {
                 if (intakePressureSet) {
                     //Head in towards home
-                    intakeTarget = 0;
                     if (sensorInputs.intakeLimitHome == false) {
+                        intakeTarget = 0;
                         SmartDashboard.putString("Intake Movement", "In -> Home");
                     } else {
+                        intakeTarget = intakeEncoderPosition;
                         SmartDashboard.putString("Intake Movement", "Homed");
                     }
                 } else {
@@ -98,28 +100,34 @@ public class ComponentsControl {
             }
             SmartDashboard.putNumber("Intake Target", intakeTarget);
                 //Intake Rotation Math
-            double intakeDistTravel = (intakeTarget-intakeEncoderPosition);
+            if (intakeLastSetTarget != intakeTarget) {
+                intakeStartPos = intakeEncoderPosition;
+                intakeLastSetTarget = intakeTarget;
+                SmartDashboard.putNumber("Intake Start Pos", intakeStartPos);
+            }
+            double intakeDistRemainTravel = (intakeTarget-intakeEncoderPosition);
             double intakeMath = 0.0;
             if (intakeTarget != intakeEncoderPosition) {
-                intakeMath = intakePerCountConstant*intakeDistTravel;
-                if (intakeMath < 0) {
-                    intakeMath = Math.min(-intakeMinSpeed, intakeMath);
-                } else if (intakeMath > 0) {
-                    intakeMath = Math.max(intakeMinSpeed, intakeMath);
+                intakeMath = Math.sqrt(Math.abs(intakeDistRemainTravel));
+                intakeMath *= intakeMotionScalerConstant;
+                if (intakeDistRemainTravel < 0) {
+                    intakeMath = Math.min(-intakeRotationMinSpeed, -intakeMath);
+                } else if (intakeDistRemainTravel > 0) {
+                    intakeMath = Math.max(intakeRotationMinSpeed, intakeMath);
                 }
-                SmartDashboard.putNumber("Intake Math", intakeMath);
             } else {
                 intakeMath = 0.0;
-                SmartDashboard.putNumber("Intake Math", intakeMath);
             }
+            SmartDashboard.putNumber("Intake Math", intakeMath);
+            SmartDashboard.putNumber("Intake Dist Travel", intakeDistRemainTravel);
+
             double intakeMathClamped = Math.max(-intakeRotationMaxSpeed, Math.min(intakeRotationMaxSpeed, intakeMath));
             SmartDashboard.putNumber("Intake Math Clamped", intakeMathClamped);
-            SmartDashboard.putNumber("Intake Dist Travel", intakeDistTravel);
             intakeRotationSpeed = intakeMathClamped;
         } else {
             //Intake Movement Locked (Not Homed)
             if (sensorInputs.intakeLimitHome == false) {
-                intakeRotationSpeed = -0.2;
+                intakeRotationSpeed = -intakeRotationMinSpeed;
                 SmartDashboard.putString("Intake Movement", "In (Homing)");
             } else {
                 intakeHomed = true;
@@ -127,10 +135,7 @@ public class ComponentsControl {
             }
         }
         SmartDashboard.putBoolean("Intake Unlocked", intakeHomed);
-        SmartDashboard.putNumber("Intake Power", intakeRotationSpeed);       
-        if (controlInputs.setHome) {
-            components.intakeEncoder.reset();
-        }
+        SmartDashboard.putNumber("Intake Power", intakeRotationSpeed);
         //Intake Code End (Exit E Stop)
         } else {
             intakeClamp = false;
@@ -157,6 +162,6 @@ public class ComponentsControl {
         components.intakeArmClamp.set(intakeClamp);
         components.intakeRotationMotor.set(-intakeRotationSpeed);
 
-        components.autoFlipPlatform.set(controlInputs.flipper ? Relay.Value.kOn : Relay.Value.kOff);
+        components.autoFlipPlatformRelay.setAngle(controlInputs.flipper ? 0 : 90);
     }
 }

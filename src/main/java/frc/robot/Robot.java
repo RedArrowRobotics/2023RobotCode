@@ -99,9 +99,11 @@ public class Robot extends TimedRobot {
     autoSelected = auto_chooser.getSelected();
     switch (autoSelected) {
       case kAutoCrossCommunity:
+        autonomousSequence.add(new AutoActionFlipper());
         autonomousSequence.add(new AutoActionCrossCommunity());
         break;
       case kClimbChargingStation:
+        autonomousSequence.add(new AutoActionFlipper());
         autonomousSequence.add(new AutoActionDriveToChargingStation());
         autonomousSequence.add(new AutoActionClimbChargingStation());
         autonomousSequence.add(new AutoActionDoNothing() );
