@@ -11,8 +11,9 @@ public class ComponentsControl {
     //Intake
     private final double intakeUprightCount = 340.0;
     private final double intakeOutCount = 932.0;
-    private final double intakeRotationSetSpeed = 0.5; //Must be a + value (0.5)
-    private final double intakeRotationUprightToleranceCounts = 30.0;
+    private final double intakeRotationSetSpeed = 0.7; //Must be a + value (0.5)
+    private final double intakeRotationUprightToleranceCounts = 10.0; //30
+    private final double intakePerCountConstant = (intakeRotationSetSpeed/intakeOutCount);
     private boolean intakeHomed = false;
     private boolean intakePressureSet = false;
     private boolean intakeEStopped = false;
@@ -95,6 +96,19 @@ public class ComponentsControl {
                 }
             }
             SmartDashboard.putNumber("Intake Target", intakeTarget);
+                //Intake Rotation Math
+            double intakeDistTravel = (intakeTarget-intakeEncoderPosition);
+            double intakeMath = 0.0;
+            if (intakeTarget != intakeEncoderPosition) {
+                intakeMath = intakePerCountConstant*intakeDistTravel;
+                SmartDashboard.putNumber("Intake Math", intakeMath);
+            } else {
+                intakeMath = 0.0;
+                SmartDashboard.putNumber("Intake Math", intakeMath);
+            }
+            double intakeMathClamped = Math.max(-intakeRotationSetSpeed, Math.min(intakeRotationSetSpeed, intakeMath));
+            SmartDashboard.putNumber("Intake Math Clamped", intakeMathClamped);
+            SmartDashboard.putNumber("Intake Dist Travel", intakeDistTravel);
         } else {
             //Intake Movement Locked (Not Homed)
             if (sensorInputs.intakeLimitHome == false) {
@@ -106,7 +120,7 @@ public class ComponentsControl {
             }
         }
         SmartDashboard.putBoolean("Intake Unlocked", intakeHomed);
-        SmartDashboard.putNumber("Intake Power", intakeRotationSpeed);
+        SmartDashboard.putNumber("Intake Power", intakeRotationSpeed);       
         if (controlInputs.setHome) {
             components.intakeEncoder.reset();
         }

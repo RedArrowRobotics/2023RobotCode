@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption(kClimbChargingStation, kClimbChargingStation);
     auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
 
-    SmartDashboard.putData(auto_chooser);
+    SmartDashboard.putData("Auto Chooser", auto_chooser);
   }
 
   /**
