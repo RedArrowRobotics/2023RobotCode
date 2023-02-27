@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Relay;
 
 public class ComponentsControl {
 
@@ -10,9 +9,13 @@ public class ComponentsControl {
     private final double beltGyroRotationInsideDegreeToleranceFromY = 70; //From ±90 degrees in each direction from start point
     //Intake
     private final double intakeUprightCount = 340.0;
-    private final double intakeOutCount = 932.0;
-    private final double intakeRotationSetSpeed = 0.5; //Must be a + value (0.5)
+    private final double intakeOutCount = 972.0;
     private final double intakeRotationUprightToleranceCounts = 30.0;
+    private final double intakeRotationMaxSpeed = 0.7; //Must be a + value
+    private final double intakeRotationMinSpeed = 0.4; //Must be a + value
+    private double intakeLastSetTarget = 0.0;
+    private double intakeStartPos = 0.0;
+    private final double intakeMotionScalerConstant = 0.06;
     private boolean intakeHomed = false;
     private boolean intakePressureSet = false;
     private boolean intakeEStopped = false;
@@ -24,6 +27,7 @@ public class ComponentsControl {
         boolean intakeClamp = controlInputs.intakeClamp || intakePressureSet;
         int intakeEncoderPosition = components.intakeEncoder.get(); //Assume this value is + towards out
         double intakeRotationSpeed = 0.0;
+        double intakeTarget = 0.0;
         SmartDashboard.putNumber("Intake Rotation Count", intakeEncoderPosition);
         boolean intakeUpright = false;
         boolean intakePressureSensor = sensorInputs.intakePressure;
@@ -62,23 +66,24 @@ public class ComponentsControl {
                 if (intakePressureSet) {
                     //Head in towards home
                     if (sensorInputs.intakeLimitHome == false) {
-                        intakeRotationSpeed = -intakeRotationSetSpeed;
+                        intakeTarget = 0;
                         SmartDashboard.putString("Intake Movement", "In -> Home");
                     } else {
-                        components.intakeEncoder.reset();
+                        intakeTarget = intakeEncoderPosition;
                         SmartDashboard.putString("Intake Movement", "Homed");
                     }
                 } else {
                     //Head towards intakeUprightCount
                     if (intakeEncoderPosition <= (intakeUprightCount - intakeRotationUprightToleranceCounts)) {
                         //Move out towards Upright
-                        intakeRotationSpeed = intakeRotationSetSpeed;
+                        intakeTarget = intakeUprightCount;
                         SmartDashboard.putString("Intake Movement", "Out -> Upright");
                     } else if (intakeEncoderPosition >= (intakeUprightCount + intakeRotationUprightToleranceCounts)) {
                         //Move in towards Upright
-                        intakeRotationSpeed = -intakeRotationSetSpeed;
+                        intakeTarget = intakeUprightCount;
                         SmartDashboard.putString("Intake Movement", "In -> Upright");
                     } else {
+                        intakeTarget = intakeEncoderPosition;
                         intakeUpright = true;
                         SmartDashboard.putString("Intake Movement", "Upright");
                     }
@@ -86,16 +91,43 @@ public class ComponentsControl {
             } else {
                 //Head out towards intakeOutCount
                 if (intakeEncoderPosition < intakeOutCount) {
-                    intakeRotationSpeed = intakeRotationSetSpeed;
+                    intakeTarget = intakeOutCount;
                     SmartDashboard.putString("Intake Movement", "Out -> Out");
                 } else {
+                    intakeTarget = intakeEncoderPosition;
                     SmartDashboard.putString("Intake Movement", "Out");
                 }
             }
+            SmartDashboard.putNumber("Intake Target", intakeTarget);
+                //Intake Rotation Math
+            if (intakeLastSetTarget != intakeTarget) {
+                intakeStartPos = intakeEncoderPosition;
+                intakeLastSetTarget = intakeTarget;
+                SmartDashboard.putNumber("Intake Start Pos", intakeStartPos);
+            }
+            double intakeDistRemainTravel = (intakeTarget-intakeEncoderPosition);
+            double intakeMath = 0.0;
+            if (intakeTarget != intakeEncoderPosition) {
+                intakeMath = Math.sqrt(Math.abs(intakeDistRemainTravel));
+                intakeMath *= intakeMotionScalerConstant;
+                if (intakeDistRemainTravel < 0) {
+                    intakeMath = Math.min(-intakeRotationMinSpeed, -intakeMath);
+                } else if (intakeDistRemainTravel > 0) {
+                    intakeMath = Math.max(intakeRotationMinSpeed, intakeMath);
+                }
+            } else {
+                intakeMath = 0.0;
+            }
+            SmartDashboard.putNumber("Intake Math", intakeMath);
+            SmartDashboard.putNumber("Intake Dist Travel", intakeDistRemainTravel);
+
+            double intakeMathClamped = Math.max(-intakeRotationMaxSpeed, Math.min(intakeRotationMaxSpeed, intakeMath));
+            SmartDashboard.putNumber("Intake Math Clamped", intakeMathClamped);
+            intakeRotationSpeed = intakeMathClamped;
         } else {
             //Intake Movement Locked (Not Homed)
             if (sensorInputs.intakeLimitHome == false) {
-                intakeRotationSpeed = -intakeRotationSetSpeed;
+                intakeRotationSpeed = -intakeRotationMinSpeed;
                 SmartDashboard.putString("Intake Movement", "In (Homing)");
             } else {
                 intakeHomed = true;
@@ -103,9 +135,7 @@ public class ComponentsControl {
             }
         }
         SmartDashboard.putBoolean("Intake Unlocked", intakeHomed);
-        if (controlInputs.setHome) {
-            components.intakeEncoder.reset();
-        }
+        SmartDashboard.putNumber("Intake Power", intakeRotationSpeed);
         //Intake Code End (Exit E Stop)
         } else {
             intakeClamp = false;
@@ -132,6 +162,6 @@ public class ComponentsControl {
         components.intakeArmClamp.set(intakeClamp);
         components.intakeRotationMotor.set(-intakeRotationSpeed);
 
-        components.autoFlipPlatform.set(controlInputs.flipper ? Relay.Value.kOn : Relay.Value.kOff);
+        components.autoFlipPlatformRelay.setAngle(controlInputs.flipper ? 0 : 90);
     }
 }

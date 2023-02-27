@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Servo;
 
 public class Components {
     
@@ -18,7 +18,8 @@ public class Components {
     public Encoder intakeEncoder = new Encoder(8, 9);
 
         //Auto
-    public final Relay autoFlipPlatform = new Relay(0, Relay.Direction.kForward);
+    //public final Relay autoFlipPlatform = new Relay(0, Relay.Direction.kForward);
+    public final Servo autoFlipPlatformRelay = new Servo(9);
 
         //Both
     public final Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
