@@ -8,9 +8,9 @@ public class ComponentsControl {
     private final double beltK = -0.25;
     private final double beltGyroRotationInsideDegreeToleranceFromY = 70; //From ±90 degrees in each direction from start point
     //Intake
-    private final double intakeUprightCount = 340.0;
+    private final double intakeUprightCount = 320.0;
     private final double intakeOutCount = 972.0;
-    private final double intakeRotationUprightToleranceCounts = 30.0;
+    private final double intakeRotationUprightToleranceCounts = 50.0;
     private final double intakeRotationMaxSpeed = 0.7; //Must be a + value
     private final double intakeRotationMinSpeed = 0.4; //Must be a + value
     private double intakeLastSetTarget = 0.0;
@@ -29,7 +29,6 @@ public class ComponentsControl {
         double intakeRotationSpeed = 0.0;
         double intakeTarget = 0.0;
         SmartDashboard.putNumber("Intake Rotation Count", intakeEncoderPosition);
-        boolean intakeUpright = false;
         boolean intakePressureSensor = sensorInputs.intakePressure;
 
         //Controls
@@ -84,7 +83,6 @@ public class ComponentsControl {
                         SmartDashboard.putString("Intake Movement", "In -> Upright");
                     } else {
                         intakeTarget = intakeEncoderPosition;
-                        intakeUpright = true;
                         SmartDashboard.putString("Intake Movement", "Upright");
                     }
                 }
@@ -141,7 +139,7 @@ public class ComponentsControl {
             intakeClamp = false;
         }
             //Belts
-        if (intakeUpright) {
+        if (intakeEncoderPosition >= (intakeUprightCount - intakeRotationUprightToleranceCounts)) {
             if (controlInputs.beltAuto) {
                 if (sensorInputs.currentYawDegrees <= -(90 - beltGyroRotationInsideDegreeToleranceFromY) && sensorInputs.currentYawDegrees >= -(90 + beltGyroRotationInsideDegreeToleranceFromY)) {
                     mainSideBeltSpeed = beltK;
