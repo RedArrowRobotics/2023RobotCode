@@ -1,9 +1,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ControlInputs {
     
+    //Control Mode
+    private boolean GameMode = false;
+    private boolean GameModeCanSwitch = false;
+
     //Joysticks IDs
     private final int driveStickDeviceId = 0;
     private final int mechanismStickRightId = 1;
@@ -27,7 +32,6 @@ public class ControlInputs {
     //Variable Defintions
     public double driveStickX = 0.0;
     public double driveStickY = 0.0;
-    //public boolean speedButton = false;
     public boolean dumpBeltRight = false;
     public boolean dumpBeltLeft = false;
     public boolean beltAuto = false;
@@ -35,7 +39,7 @@ public class ControlInputs {
     public boolean intakeClamp = false;
     public boolean intakeRelease = false;
     public boolean intakeClampSwitchModes = false; //Switch
-    public boolean intakeEStop = false;
+    public boolean intakeEStop = false; //Switch
 
     //debug
     public boolean flipper = false;
@@ -48,22 +52,45 @@ public class ControlInputs {
         driveStickY = driveStick.getY();
         
         //Buttons
-        //speedButton = driveStick.getRawButton(12);
+        if (GameMode == false) {
             //Mechanism Stick Right
-        beltAuto = mechanismStickRight.getRawButton(beltsAutoId);
-        dumpBeltLeft = mechanismStickRight.getRawButton(beltLeftId);
-        dumpBeltRight = mechanismStickRight.getRawButton(beltRightId);
-        intakeClamp = mechanismStickRight.getRawButton(intakeClampId);
-        intakeRelease = mechanismStickRight.getRawButton(intakeReleaseId);
-        intakeClampSwitchModes = (mechanismStickRight.getX() >= -0.5);
+            beltAuto = mechanismStickRight.getRawButton(beltsAutoId);
+            dumpBeltLeft = mechanismStickRight.getRawButton(beltLeftId);
+            dumpBeltRight = mechanismStickRight.getRawButton(beltRightId);
+            intakeClamp = mechanismStickRight.getRawButton(intakeClampId);
+            intakeRelease = mechanismStickRight.getRawButton(intakeReleaseId);
+            intakeClampSwitchModes = (mechanismStickRight.getX() >= -0.5);
             //Mechanism Stick Left
-        intakeRotate = mechanismStickLeft.getRawButton(intakeRotateId);
-        intakeEStop = (mechanismStickLeft.getX() >= -0.5);
+            intakeRotate = mechanismStickLeft.getRawButton(intakeRotateId);
+            intakeEStop = (mechanismStickLeft.getX() >= -0.5);
+        } else if (GameMode) {
+            //Mechanism Stick Right
+            beltAuto = driveStick.getRawButton(5);
+            dumpBeltLeft = driveStick.getRawButton(3);
+            dumpBeltRight = driveStick.getRawButton(4);
+            intakeClamp = driveStick.getRawButton(1);
+            intakeRelease = driveStick.getRawButton(6);
+            intakeClampSwitchModes = true;
+            //Mechanism Stick Left
+            intakeRotate = driveStick.getRawButton(2);
+            intakeEStop = driveStick.getRawButton(7);
+        }
+
+        //Gamemode Toggle
+        if (driveStick.getRawButton(10) && driveStick.getRawButton(12)) {
+            if (GameModeCanSwitch) {
+                GameModeCanSwitch = false;
+                GameMode = !GameMode;
+            }
+        } else {
+            GameModeCanSwitch = true;
+        }
+        SmartDashboard.putBoolean("GameMode", GameMode);
 
         //Intake Release
         intakeRelease = intakeRelease || beltAuto || dumpBeltLeft || dumpBeltRight;
 
         //debug
-        flipper = driveStick.getRawButton(2);
+        flipper = driveStick.getRawButton(8);
     }
 }
