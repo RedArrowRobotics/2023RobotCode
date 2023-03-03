@@ -142,7 +142,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    controlInputs.readControls();
+    controlInputs.readControls(componentsControl);
     sensorInputs.readSensors();
     componentsControl.runComponents(components, controlInputs, sensorInputs);
 

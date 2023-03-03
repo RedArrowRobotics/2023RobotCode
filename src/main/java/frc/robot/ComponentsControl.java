@@ -19,12 +19,13 @@ public class ComponentsControl {
     private boolean intakeHomed = false;
     private boolean intakePressureSet = false;
     private boolean intakeEStopped = false;
+    public boolean intakeClamp = false;
 
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         
         //Variable Defintions
         double mainSideBeltSpeed = 0.0;
-        boolean intakeClamp = controlInputs.intakeClamp || intakePressureSet;
+        intakeClamp = controlInputs.intakeClamp || intakePressureSet;
         int intakeEncoderPosition = components.intakeEncoder.get(); //Assume this value is + towards out
         double intakeRotationSpeed = 0.0;
         double intakeTarget = 0.0;
