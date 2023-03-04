@@ -29,7 +29,7 @@ public class ComponentsControl {
         intakeClamp = controlInputs.intakeClamp || intakePressureSet;
         int intakeEncoderPosition = components.intakeEncoder.get(); //Assume this value is + towards out
         double intakeRotationSpeed = 0.0;
-        double intakeTarget = intakeLastSetTarget;
+        double intakeTarget = intakeEncoderPosition;
         SmartDashboard.putNumber("Intake Rotation Count", intakeEncoderPosition);
         boolean intakePressureSensor = sensorInputs.intakePressure;
 
