@@ -63,7 +63,7 @@ public class ControlInputs {
             intakeClampSwitchModes = (mechanismStickRight.getX() >= -0.5);
             //Mechanism Stick Left
             intakeRotate = mechanismStickLeft.getRawButton(intakeRotateId);
-            intakeEStop = (mechanismStickLeft.getX() >= -0.5);
+            intakeEStop = (mechanismStickLeft.getX() <= -0.5);
         } else if (GameMode) {
             //Mechanism Stick Right
             beltAuto = driveStick.getRawButton(5);
