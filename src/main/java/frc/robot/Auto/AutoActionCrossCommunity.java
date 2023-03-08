@@ -15,7 +15,7 @@ public class AutoActionCrossCommunity extends AutoAction {
     private double maxTime = 2.0;
 
     //Distance of move (edge of community) in inches
-    private double distance = 142.0;
+    private double distance = 160.0;
 
     private double toleranceInches = 2.0;
     

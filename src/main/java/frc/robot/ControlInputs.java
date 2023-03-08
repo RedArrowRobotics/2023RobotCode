@@ -8,6 +8,7 @@ public class ControlInputs {
     //Control Mode
     private boolean GameMode = false;
     private boolean GameModeCanSwitch = false;
+    private boolean GameModeIntakeUse = false;
 
     //Joysticks IDs
     private final int driveStickDeviceId = 0;
@@ -45,7 +46,7 @@ public class ControlInputs {
     public boolean flipper = false;
 
     //Reading the controls
-    public final void readControls() {
+    public final void readControls(ComponentsControl componentsControl) {
         
         //Drivestick
         driveStickX = driveStick.getX();
@@ -62,18 +63,34 @@ public class ControlInputs {
             intakeClampSwitchModes = (mechanismStickRight.getX() >= -0.5);
             //Mechanism Stick Left
             intakeRotate = mechanismStickLeft.getRawButton(intakeRotateId);
-            intakeEStop = (mechanismStickLeft.getX() >= -0.5);
+            intakeEStop = (mechanismStickLeft.getX() <= -0.5);
         } else if (GameMode) {
             //Mechanism Stick Right
             beltAuto = driveStick.getRawButton(5);
             dumpBeltLeft = driveStick.getRawButton(3);
             dumpBeltRight = driveStick.getRawButton(4);
-            intakeClamp = driveStick.getRawButton(1);
-            intakeRelease = driveStick.getRawButton(6);
+            //intakeClamp = driveStick.getRawButton(1);
+            //intakeRelease = driveStick.getRawButton(6);
             intakeClampSwitchModes = true;
             //Mechanism Stick Left
             intakeRotate = driveStick.getRawButton(2);
             intakeEStop = driveStick.getRawButton(7);
+
+            //Intake Clamp
+            if (driveStick.getRawButton(1)) {
+                if (GameModeIntakeUse) {
+                    GameModeIntakeUse = false;
+                    if (componentsControl.intakeClamp) {
+                        intakeRelease = true;
+                    } else {
+                        intakeClamp = true;
+                    }
+                }
+            } else {
+                GameModeIntakeUse = true;
+                intakeClamp = false;
+                intakeRelease = false;
+            }
         }
 
         //Gamemode Toggle
