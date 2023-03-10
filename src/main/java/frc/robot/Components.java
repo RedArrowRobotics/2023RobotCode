@@ -22,5 +22,5 @@ public class Components {
     public final Servo autoFlipPlatformRelay = new Servo(9);
 
         //Both
-    public final Compressor compressor = new Compressor(0, PneumaticsModuleType.REVPH);
+    public final Compressor compressor = new Compressor(16, PneumaticsModuleType.REVPH);
 }
