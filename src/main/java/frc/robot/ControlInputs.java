@@ -41,6 +41,8 @@ public class ControlInputs {
     public boolean intakeRelease = false;
     public boolean intakeClampSwitchModes = false; //Switch
     public boolean intakeEStop = false; //Switch
+    public boolean intakeManualModeOut = false;
+    public boolean intakeManualModeIn = false;
 
     //debug
     public boolean flipper = false;
@@ -53,6 +55,8 @@ public class ControlInputs {
         driveStickY = driveStick.getY();
         
         //Buttons
+        intakeManualModeIn = driveStick.getRawButton(11);
+        intakeManualModeOut = driveStick.getRawButton(9);
         if (GameMode == false) {
             //Mechanism Stick Right
             beltAuto = mechanismStickRight.getRawButton(beltsAutoId);
