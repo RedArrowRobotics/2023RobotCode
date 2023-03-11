@@ -14,7 +14,7 @@ public class Components {
         //Teleop
     public final CANSparkMax mainSideBelt = new CANSparkMax(6, MotorType.kBrushless);
     public final CANSparkMax intakeRotationMotor = new CANSparkMax(5, MotorType.kBrushed);
-    public final Solenoid intakeArmClamp = new Solenoid(PneumaticsModuleType.REVPH, 0);
+    public final Solenoid intakeArmClamp = new Solenoid(16, PneumaticsModuleType.REVPH, 0);
     public Encoder intakeEncoder = new Encoder(8, 9);
 
         //Auto
