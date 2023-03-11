@@ -11,12 +11,14 @@ public class SensorInputs {
     //Sensor Definitions
     private DigitalInput intakeLimitSwitchHome = new DigitalInput(0);
     private DigitalInput intakePressureSwitch = new DigitalInput(1);
+    private DigitalInput intakePhotoEyeSensor = new DigitalInput(2);
 
     private final AHRS navxAhrs = new AHRS(SPI.Port.kMXP);
 
     //Variable Defintions
     public boolean intakeLimitHome = false;
     public boolean intakePressure = false;
+    public boolean intakeProxySensor = false;
 
     public float currentPitchDegrees = (float) 0.0;
     public float currentYawDegrees = (float)0.0;
@@ -28,8 +30,11 @@ public class SensorInputs {
         //Intake
         intakeLimitHome = intakeLimitSwitchHome.get();
         intakePressure = intakePressureSwitch.get();
+        intakeProxySensor = !intakePhotoEyeSensor.get();
+
         SmartDashboard.putBoolean("Intake Homed", intakeLimitHome);
         SmartDashboard.putBoolean("Intake Pressure", intakePressure);
+        SmartDashboard.putBoolean("Intake PhotoEye", intakeProxySensor);
 
         //NavX
         currentPitchDegrees = navxAhrs.getPitch();
