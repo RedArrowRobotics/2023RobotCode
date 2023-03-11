@@ -33,6 +33,7 @@ public class ComponentsControl {
         double intakeTarget = intakeEncoderPosition;
         SmartDashboard.putNumber("Intake Rotation Count", intakeEncoderPosition);
         boolean intakePressureSensor = sensorInputs.intakePressure;
+        boolean beltsEnable = (intakeEncoderPosition >= (intakeUprightCount - intakeRotationUprightToleranceCounts));
 
         //Controls
             //Intake
@@ -160,7 +161,7 @@ public class ComponentsControl {
             intakeClamp = false;
         }
             //Belts
-        if (intakeEncoderPosition >= (intakeUprightCount - intakeRotationUprightToleranceCounts)) {
+        if (beltsEnable) {
             if (controlInputs.beltAuto) {
                 if (sensorInputs.currentYawDegrees <= -(90 - beltGyroRotationInsideDegreeToleranceFromY) && sensorInputs.currentYawDegrees >= -(90 + beltGyroRotationInsideDegreeToleranceFromY)) {
                     mainSideBeltSpeed = beltK;
