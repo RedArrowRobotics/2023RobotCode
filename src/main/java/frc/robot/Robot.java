@@ -15,9 +15,13 @@ import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.Auto.AutoAction;
 import frc.robot.Auto.AutoActionClimbChargingStation;
 import frc.robot.Auto.AutoActionDoNothing;
+import frc.robot.Auto.AutoActionDriveBackToChgStation;
 import frc.robot.Auto.AutoActionDriveToChargingStation;
 import frc.robot.Auto.AutoActionCrossCommunity;
 import frc.robot.Auto.AutoActionFlipper;
+import frc.robot.Auto.AutoActionCrossChargingStation;
+import frc.robot.Auto.AutoActionLevelAfterCross;
+import frc.robot.Auto.AutoActionCrossCommunityAfterStation;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -44,6 +48,7 @@ public class Robot extends TimedRobot {
   private final String kAutoModeNull = "Do Nothing";
   private final String kAutoCrossCommunity = "Cross Community";
   private final String kClimbChargingStation = "Climb Chrg Station";
+  private final String kCrossChargingStationAndBack = "Cross Chrg Stat and Back";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -65,6 +70,7 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption(kAutoModeNull, kAutoModeNull);
     auto_chooser.addOption(kAutoCrossCommunity, kAutoCrossCommunity);
     auto_chooser.addOption(kClimbChargingStation, kClimbChargingStation);
+    auto_chooser.addOption(kCrossChargingStationAndBack, kCrossChargingStationAndBack);
     auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
 
     SmartDashboard.putData("Auto Chooser", auto_chooser);
@@ -108,6 +114,15 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new AutoActionClimbChargingStation());
         autonomousSequence.add(new AutoActionDoNothing() );
         break;
+      case kCrossChargingStationAndBack:
+        autonomousSequence.add(new AutoActionFlipper());
+        autonomousSequence.add(new AutoActionDriveToChargingStation());
+        autonomousSequence.add(new AutoActionCrossChargingStation());
+        autonomousSequence.add(new AutoActionLevelAfterCross());
+        autonomousSequence.add(new AutoActionCrossCommunityAfterStation());
+        autonomousSequence.add(new AutoActionDriveBackToChgStation());
+        autonomousSequence.add(new AutoActionClimbChargingStation());
+        break;
       default:
         autonomousSequence.add(new AutoActionDoNothing());
         break;
@@ -120,6 +135,8 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
 
     if (autonomousSequence.size() > 0) {
+      SmartDashboard.putString("Current Auto Action",
+         autonomousSequence.get(0).getClass().toString());
       sensorInputs.readSensors();
       if (autonomousSequence.get(0).Execute(driveTrain, components, sensorInputs)) {
         autonomousSequence.get(0).Finalize(driveTrain, components, sensorInputs);
