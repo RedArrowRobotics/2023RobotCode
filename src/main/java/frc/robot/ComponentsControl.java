@@ -11,7 +11,7 @@ public class ComponentsControl {
     private final double intakeUprightCount = 320.0;
     private final double intakeOutCount = 972.0;
     private final double intakeRotationUprightToleranceCounts = 50.0;
-    private final double intakeRotationMaxSpeed = 0.7; //Must be a + value
+    private final double intakeRotationMaxSpeed = 1.0; //Must be a + value
     private final double intakeRotationMinSpeed = 0.4; //Must be a + value
     private double intakeLastSetTarget = 0.0;
     private double intakeStartPos = 0.0;
@@ -22,18 +22,21 @@ public class ComponentsControl {
     public boolean intakeClamp = false;
     private int intakeRotationCycleLock = 0; //Must always be set to a + value
     private boolean intakeManualMode = false;
+    private boolean intakeProxSet = false;
 
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         
         //Variable Defintions
         double mainSideBeltSpeed = 0.0;
-        intakeClamp = controlInputs.intakeClamp || intakePressureSet;
         int intakeEncoderPosition = components.intakeEncoder.get(); //Assume this value is + towards out
         double intakeRotationSpeed = 0.0;
         double intakeTarget = intakeEncoderPosition;
         SmartDashboard.putNumber("Intake Rotation Count", intakeEncoderPosition);
         boolean intakePressureSensor = sensorInputs.intakePressure;
         boolean beltsEnable = (intakeEncoderPosition >= (intakeUprightCount - intakeRotationUprightToleranceCounts));
+        boolean intakeProx = (sensorInputs.intakeProxySensor && (intakeEncoderPosition >= intakeOutCount));
+        SmartDashboard.putBoolean("Intake Prox", intakeProx);
+        intakeClamp = controlInputs.intakeClamp || intakePressureSet || intakeProxSet;
 
         //Controls
             //Intake
@@ -44,23 +47,36 @@ public class ComponentsControl {
         if (intakeEStopped == false) {
         //Intake Code Start (Enter E Stop)
             //Intake Clamping
+                //Clamp Button
             if (controlInputs.intakeClampSwitchModes == false) {
                 SmartDashboard.putString("Intake Clamp Mode", "Clamp Only");
             } else {
                 intakePressureSensor = controlInputs.intakeClamp;
                 SmartDashboard.putString("Intake Clamp Mode", "Clamp / Pressure Override");
             }
+                //Pressure Sensor
             if (intakePressureSensor && controlInputs.intakeClamp) {
                 intakePressureSet = true;
             }
+                //Proxy Sensor
+            if (intakeProx) {
+                intakeProxSet = true;
+            }
+            //Intake Release
             if (controlInputs.intakeRelease && intakeClamp) {
                 intakeClamp = false;
                 if (intakePressureSensor == false) {
                     intakePressureSet = false;
+                }
+                if (intakeProx == false) {
+                    intakeProxSet = false;
+                }
+                if ((intakePressureSensor == false) || (intakeProx == false)) {
                     intakeRotationCycleLock = 25;
                 }
             }
             SmartDashboard.putBoolean("Intake PressureSet", intakePressureSet);
+            SmartDashboard.putBoolean("Intake ProxSet", intakeProxSet);
                 //Intake Rotation
                     //Negative -> Intake rotation towards home/in
                     //Positive -> Intake rotation towards out
@@ -71,7 +87,7 @@ public class ComponentsControl {
                     if (intakeRotationCycleLock <= 0) {
                         //Intake Movement Unlocked (Cycles)
                         if (controlInputs.intakeRotate == false) {
-                            if (intakePressureSet) {
+                            if (intakePressureSet || intakeProxSet) {
                                 //Head in towards home
                                 if (sensorInputs.intakeLimitHome == false) {
                                     intakeTarget = 0;

@@ -34,7 +34,7 @@ public class SensorInputs {
 
         SmartDashboard.putBoolean("Intake Homed", intakeLimitHome);
         SmartDashboard.putBoolean("Intake Pressure", intakePressure);
-        SmartDashboard.putBoolean("Intake Proxy", intakeProxySensor);
+        SmartDashboard.putBoolean("Intake PhotoEye", intakeProxySensor);
 
         //NavX
         currentPitchDegrees = navxAhrs.getPitch();
