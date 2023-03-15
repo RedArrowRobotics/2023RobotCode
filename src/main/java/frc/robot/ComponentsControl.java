@@ -59,8 +59,12 @@ public class ComponentsControl {
                 intakePressureSet = true;
             }
                 //Proxy Sensor
-            if (intakeProx) {
-                intakeProxSet = true;
+            if (controlInputs.intakePhotoEyesActive) {
+                if (intakeProx) {
+                    intakeProxSet = true;
+                }
+            } else {
+                intakeProxSet = false;
             }
             //Intake Release
             if (controlInputs.intakeRelease && intakeClamp) {
@@ -87,28 +91,41 @@ public class ComponentsControl {
                     if (intakeRotationCycleLock <= 0) {
                         //Intake Movement Unlocked (Cycles)
                         if (controlInputs.intakeRotate == false) {
-                            if (intakePressureSet || intakeProxSet) {
-                                //Head in towards home
+                            //Head towards home/upright/inside
+                            if (controlInputs.intakeGoInside == false) {
+                                //Head towards home/upright
+                                if (intakePressureSet || intakeProxSet) {
+                                    //Head in towards home
+                                    if (sensorInputs.intakeLimitHome == false) {
+                                        intakeTarget = 0;
+                                        SmartDashboard.putString("Intake Movement", "In -> Home");
+                                    } else {
+                                        intakeTarget = intakeEncoderPosition;
+                                        SmartDashboard.putString("Intake Movement", "Homed");
+                                    }
+                                } else {
+                                    //Head towards intakeUprightCount
+                                    if (intakeEncoderPosition <= (intakeUprightCount - intakeRotationUprightToleranceCounts)) {
+                                        //Move out towards Upright
+                                        intakeTarget = intakeUprightCount;
+                                        SmartDashboard.putString("Intake Movement", "Out -> Upright");
+                                    } else if (intakeEncoderPosition >= (intakeUprightCount + intakeRotationUprightToleranceCounts)) {
+                                        //Move in towards Upright
+                                        intakeTarget = intakeUprightCount;
+                                        SmartDashboard.putString("Intake Movement", "In -> Upright");
+                                    } else {
+                                        intakeTarget = intakeEncoderPosition;
+                                        SmartDashboard.putString("Intake Movement", "Upright");
+                                    }
+                                }
+                            } else {
+                                //Head towards inside
                                 if (sensorInputs.intakeLimitHome == false) {
                                     intakeTarget = 0;
                                     SmartDashboard.putString("Intake Movement", "In -> Home");
                                 } else {
                                     intakeTarget = intakeEncoderPosition;
                                     SmartDashboard.putString("Intake Movement", "Homed");
-                                }
-                            } else {
-                                //Head towards intakeUprightCount
-                                if (intakeEncoderPosition <= (intakeUprightCount - intakeRotationUprightToleranceCounts)) {
-                                    //Move out towards Upright
-                                    intakeTarget = intakeUprightCount;
-                                    SmartDashboard.putString("Intake Movement", "Out -> Upright");
-                                } else if (intakeEncoderPosition >= (intakeUprightCount + intakeRotationUprightToleranceCounts)) {
-                                    //Move in towards Upright
-                                    intakeTarget = intakeUprightCount;
-                                    SmartDashboard.putString("Intake Movement", "In -> Upright");
-                                } else {
-                                    intakeTarget = intakeEncoderPosition;
-                                    SmartDashboard.putString("Intake Movement", "Upright");
                                 }
                             }
                         } else {
