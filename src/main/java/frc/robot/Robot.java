@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
   private final String kAutoCrossCommunity = "Cross Community";
   private final String kClimbChargingStation = "Climb Chrg Station";
   private final String kCrossChargingStationAndBack = "Cross Chrg Stat and Back";
+  private final String kCrossGetCubeAndBack = "Cross, Get Cube, Back";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -71,6 +72,10 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption(kAutoCrossCommunity, kAutoCrossCommunity);
     auto_chooser.addOption(kClimbChargingStation, kClimbChargingStation);
     auto_chooser.addOption(kCrossChargingStationAndBack, kCrossChargingStationAndBack);
+    if (sensorInputs.pixyAvailable)
+    {
+      auto_chooser.addOption(kCrossGetCubeAndBack, kCrossGetCubeAndBack);
+    }
     auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
 
     SmartDashboard.putData("Auto Chooser", auto_chooser);
@@ -123,6 +128,12 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new AutoActionDriveBackToChgStation());
         autonomousSequence.add(new AutoActionClimbChargingStation());
         break;
+      case kCrossGetCubeAndBack:
+        autonomousSequence.add(new AutoActionFlipper());
+        autonomousSequence.add(new AutoActionDriveToChargingStation());
+        autonomousSequence.add(new AutoActionCrossChargingStation());
+        autonomousSequence.add(new AutoActionLevelAfterCross());
+        autonomousSequence.add(new AutoActionDoNothing() );
       default:
         autonomousSequence.add(new AutoActionDoNothing());
         break;
