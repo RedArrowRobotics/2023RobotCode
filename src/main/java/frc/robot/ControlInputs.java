@@ -24,6 +24,7 @@ public class ControlInputs {
     private final int beltsAutoId = 9;
         //Mechanism Stick Left
     private final int intakeRotateId = 12;
+    private final int intakeGoInsideId = 11;
 
     //Joystick Definitions
     private final Joystick driveStick = new Joystick(driveStickDeviceId);
@@ -43,6 +44,8 @@ public class ControlInputs {
     public boolean intakeEStop = false; //Switch
     public boolean intakeManualModeOut = false;
     public boolean intakeManualModeIn = false;
+    public boolean intakePhotoEyesActive = false;
+    public boolean intakeGoInside = false;
 
     //debug
     public boolean flipper = false;
@@ -65,9 +68,11 @@ public class ControlInputs {
             intakeClamp = mechanismStickRight.getRawButton(intakeClampId);
             intakeRelease = mechanismStickRight.getRawButton(intakeReleaseId);
             intakeClampSwitchModes = (mechanismStickRight.getX() >= -0.5);
+            intakePhotoEyesActive = (mechanismStickRight.getY() >= 0.5);
             //Mechanism Stick Left
             intakeRotate = mechanismStickLeft.getRawButton(intakeRotateId);
             intakeEStop = (mechanismStickLeft.getX() <= -0.5);
+            intakeGoInside = mechanismStickLeft.getRawButton(intakeGoInsideId);
         } else if (GameMode) {
             //Mechanism Stick Right
             beltAuto = driveStick.getRawButton(5);
@@ -76,9 +81,11 @@ public class ControlInputs {
             //intakeClamp = driveStick.getRawButton(1);
             //intakeRelease = driveStick.getRawButton(6);
             intakeClampSwitchModes = true;
+            intakePhotoEyesActive = false;
             //Mechanism Stick Left
             intakeRotate = driveStick.getRawButton(2);
             intakeEStop = driveStick.getRawButton(7);
+            intakeGoInside = false;
 
             //Intake Clamp
             if (driveStick.getRawButton(1)) {
