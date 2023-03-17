@@ -8,7 +8,8 @@ public class AutoActionClimbChargingStation extends AutoAction {
     private int levelCyclesCount = 0;
     private final float outerPitchLimitInDegrees = 10;
     private final float innerPitchLimitInDegrees = .5f;
-    private final double maxDrivePower = .3;
+    private final double climbMaxDrivePower = .3;
+    private final double levelMaxDrivePower = .3;
     
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
@@ -19,12 +20,12 @@ public class AutoActionClimbChargingStation extends AutoAction {
         if (currentPitch < -outerPitchLimitInDegrees)
         {
             levelCyclesCount = 0;
-            driveTrain.arcadeDrive(maxDrivePower, 0);
+            driveTrain.arcadeDrive(climbMaxDrivePower, 0);
         }
         if (currentPitch > outerPitchLimitInDegrees)
         {
             levelCyclesCount = 0;
-            driveTrain.arcadeDrive(maxDrivePower, 0);
+            driveTrain.arcadeDrive(climbMaxDrivePower, 0);
         }
         if (currentPitch < innerPitchLimitInDegrees && currentPitch > -innerPitchLimitInDegrees)
         {
@@ -34,7 +35,7 @@ public class AutoActionClimbChargingStation extends AutoAction {
         else
         {
             levelCyclesCount = 0;
-            driveTrain.arcadeDrive(-(maxDrivePower * (currentPitch / 10)) , 0);
+            driveTrain.arcadeDrive(-(levelMaxDrivePower * (currentPitch / 10)) , 0);
         }
         return levelCyclesCount > 74;
     }

@@ -177,6 +177,8 @@ public class Robot extends TimedRobot {
     driveTrain.arcadeDrive(
       -controlInputs.driveStickY*forwardPower,
       controlInputs.driveStickX*turnPower);
+
+    SmartDashboard.putNumber("Motor Power", (-controlInputs.driveStickY*forwardPower));
   }
 
   /** This function is called once when the robot is disabled. */
