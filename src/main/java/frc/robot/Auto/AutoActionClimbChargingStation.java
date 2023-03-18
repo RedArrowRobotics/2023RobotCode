@@ -8,7 +8,13 @@ public class AutoActionClimbChargingStation extends AutoAction {
     private int levelCyclesCount = 0;
     private final float outerPitchLimitInDegrees = 10;
     private final float innerPitchLimitInDegrees = .5f;
-    private final double maxDrivePower = .3;
+    private final double climbMaxDrivePower; 
+    private final double levelMaxDrivePower = .3;
+    
+    public AutoActionClimbChargingStation(float drivePowerForClimb)
+    {
+        climbMaxDrivePower = drivePowerForClimb;
+    }
     
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
@@ -16,25 +22,28 @@ public class AutoActionClimbChargingStation extends AutoAction {
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
         float currentPitch = sensor.currentPitchDegrees;
-        if (currentPitch < -outerPitchLimitInDegrees)
-        {
+        if (currentPitch < -outerPitchLimitInDegrees) {
             levelCyclesCount = 0;
-            driveTrain.arcadeDrive(maxDrivePower, 0);
+            driveTrain.arcadeDrive(climbMaxDrivePower, 0);
         }
-        if (currentPitch > outerPitchLimitInDegrees)
-        {
-            levelCyclesCount = 0;
-            driveTrain.arcadeDrive(maxDrivePower, 0);
-        }
-        if (currentPitch < innerPitchLimitInDegrees && currentPitch > -innerPitchLimitInDegrees)
-        {
-            driveTrain.arcadeDrive(0,0);
-            levelCyclesCount++;
-        }
-        else
-        {
-            levelCyclesCount = 0;
-            driveTrain.arcadeDrive(-(maxDrivePower * (currentPitch / 10)) , 0);
+        else {
+            if (currentPitch > outerPitchLimitInDegrees)
+            {
+                levelCyclesCount = 0;
+                driveTrain.arcadeDrive(-climbMaxDrivePower, 0);
+            }
+            else {
+                if (currentPitch < innerPitchLimitInDegrees && currentPitch > -innerPitchLimitInDegrees)
+                {
+                    driveTrain.arcadeDrive(0,0);
+                    levelCyclesCount++;
+                }
+                else
+                {
+                    levelCyclesCount = 0;
+                    driveTrain.arcadeDrive(-(levelMaxDrivePower * (currentPitch / 10)) , 0);
+                }
+            }
         }
         return levelCyclesCount > 74;
     }

@@ -6,7 +6,7 @@ import frc.robot.SensorInputs;
 
 public class AutoActionLevelAfterCross extends AutoAction {
     private final double baseDrivePower = .5;
-    private final float flatPitchTolerance = 0.66f;
+    private final float flatPitchTolerance = .8f;
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
         
