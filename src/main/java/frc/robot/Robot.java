@@ -107,12 +107,13 @@ public class Robot extends TimedRobot {
       case kAutoCrossCommunity:
         autonomousSequence.add(new AutoActionFlipper());
         autonomousSequence.add(new AutoActionCrossCommunity());
+        autonomousSequence.add(new AutoActionDoNothing());
         break;
       case kClimbChargingStation:
         autonomousSequence.add(new AutoActionFlipper());
         autonomousSequence.add(new AutoActionDriveToChargingStation());
         autonomousSequence.add(new AutoActionClimbChargingStation());
-        autonomousSequence.add(new AutoActionDoNothing() );
+        autonomousSequence.add(new AutoActionDoNothing());
         break;
       case kCrossChargingStationAndBack:
         autonomousSequence.add(new AutoActionFlipper());
@@ -122,6 +123,7 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new AutoActionCrossCommunityAfterStation());
         autonomousSequence.add(new AutoActionDriveBackToChgStation());
         autonomousSequence.add(new AutoActionClimbChargingStation());
+        autonomousSequence.add(new AutoActionDoNothing());
         break;
       default:
         autonomousSequence.add(new AutoActionDoNothing());
