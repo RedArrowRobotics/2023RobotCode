@@ -22,6 +22,7 @@ import frc.robot.Auto.AutoActionFlipper;
 import frc.robot.Auto.AutoActionCrossChargingStation;
 import frc.robot.Auto.AutoActionLevelAfterCross;
 import frc.robot.Auto.AutoActionCrossCommunityAfterStation;
+import frc.robot.Auto.AutoActionCaptureCubeWithPixy;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -75,10 +76,13 @@ public class Robot extends TimedRobot {
     if (sensorInputs.pixyAvailable)
     {
       auto_chooser.addOption(kCrossGetCubeAndBack, kCrossGetCubeAndBack);
+      sensorInputs.getPixyBlocks();
     }
     auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
 
     SmartDashboard.putData("Auto Chooser", auto_chooser);
+
+    
   }
 
   /**
@@ -129,10 +133,11 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new AutoActionClimbChargingStation());
         break;
       case kCrossGetCubeAndBack:
-        autonomousSequence.add(new AutoActionFlipper());
-        autonomousSequence.add(new AutoActionDriveToChargingStation());
-        autonomousSequence.add(new AutoActionCrossChargingStation());
-        autonomousSequence.add(new AutoActionLevelAfterCross());
+        //autonomousSequence.add(new AutoActionFlipper());
+        //autonomousSequence.add(new AutoActionDriveToChargingStation());
+        //autonomousSequence.add(new AutoActionCrossChargingStation());
+        //autonomousSequence.add(new AutoActionLevelAfterCross());
+        autonomousSequence.add(new AutoActionCaptureCubeWithPixy());
         autonomousSequence.add(new AutoActionDoNothing() );
       default:
         autonomousSequence.add(new AutoActionDoNothing());
@@ -197,7 +202,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
-    sensorInputs.readSensors();
+    sensorInputs.getPixyBlocks();
   }
 
   /** This function is called once when test mode is enabled. */

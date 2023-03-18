@@ -15,7 +15,8 @@ public class SensorInputs {
     private DigitalInput intakePressureSwitch = new DigitalInput(1);
     private DigitalInput intakePhotoEyeSensor = new DigitalInput(2);
     private SerialPort pixyPort;
-    private byte[] pixyRequest = new byte[]{'a'};
+    private byte[] pixyGetBlockRequest = new byte[]{0x61};
+    private byte[] pixyCalculateTargetBlockIndexRequest = new byte[]{0x62};
     private final AHRS navxAhrs = new AHRS(SPI.Port.kMXP);
     
     //Variable Defintions
@@ -68,12 +69,26 @@ public class SensorInputs {
         
     }
 
-    public final void readSensorsWithPixy()
+    public final void calculatePixyBlockIndex()
     {
-        readSensors();
-
         if (pixyAvailable) {
-            pixyPort.write(pixyRequest, 1);
+            pixyPort.write(pixyCalculateTargetBlockIndexRequest, 1);
+            byte[] arduinoResponse = pixyPort.read(1);
+            if (arduinoResponse[0] == 0x01)
+            {
+                SmartDashboard.putBoolean("Pixy Block Index Set", true);
+            }
+            else
+            {
+                SmartDashboard.putNumber("Foo", arduinoResponse[0]);
+            }
+        }
+    }
+
+    public final void getPixyBlocks()
+    {
+        if (pixyAvailable) {
+            pixyPort.write(pixyGetBlockRequest, 1);
             byte[] arduinoResponse = pixyPort.read(1);
             if (arduinoResponse[0] == 0x01) {
                 SmartDashboard.putBoolean("Detected", true);
