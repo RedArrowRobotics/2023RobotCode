@@ -4,7 +4,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SerialPort.Parity;
 import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.SerialPort.StopBits;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -31,12 +33,12 @@ public class SensorInputs {
     public boolean objectDetected;
     public int objectWidth;
     public int objectXCoordinate;
-
+    
     public SensorInputs() {
         try {
-            pixyPort = new SerialPort(115200, Port.kUSB1);
+            pixyPort = new SerialPort(115200, Port.kUSB1, 8, Parity.kNone, StopBits.kOne);
             pixyAvailable = true;
-            System.out.print("Arduino/Pixy Serial Port Created\n");
+            System.out.println("Arduino/Pixy Serial Port Created");
         }
         catch (Exception ex)
         {
@@ -73,14 +75,14 @@ public class SensorInputs {
     {
         if (pixyAvailable) {
             pixyPort.write(pixyCalculateTargetBlockIndexRequest, 1);
+            while (pixyPort.getBytesReceived() < 1)
+            {
+            }
             byte[] arduinoResponse = pixyPort.read(1);
-            if (arduinoResponse[0] == 0x01)
+            
+            if (arduinoResponse[0] == 0x42)
             {
                 SmartDashboard.putBoolean("Pixy Block Index Set", true);
-            }
-            else
-            {
-                SmartDashboard.putNumber("Foo", arduinoResponse[0]);
             }
         }
     }
@@ -89,11 +91,18 @@ public class SensorInputs {
     {
         if (pixyAvailable) {
             pixyPort.write(pixyGetBlockRequest, 1);
+            while (pixyPort.getBytesReceived() < 1)
+            {
+            }
+            
             byte[] arduinoResponse = pixyPort.read(1);
-            if (arduinoResponse[0] == 0x01) {
+            
+            if (arduinoResponse[0] == 0x41) {
                 SmartDashboard.putBoolean("Detected", true);
-                byte[] objectData = new byte[8];
-                objectData = pixyPort.read(8);
+                while (pixyPort.getBytesReceived() < 8)
+                {
+                }
+                byte[] objectData = pixyPort.read(8);
                 objectXCoordinate = (int)(objectData[0] & 0xFF) * 256 + (int)(objectData[1] & 0xFF);
                 objectWidth = (int)(objectData[4] & 0xFF) * 256 + (int)(objectData[5] & 0xFF);
                 SmartDashboard.putNumber("Pixy X", objectXCoordinate);

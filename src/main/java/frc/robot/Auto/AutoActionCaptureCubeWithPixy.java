@@ -11,6 +11,7 @@ public class AutoActionCaptureCubeWithPixy extends AutoAction {
     private double initialRightEncoderCount = 0.0;
     private double leftEncoderCountLimit;
     private double rightEncoderCountLimit;
+    private final double baseMotorPower = .25;
 
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
@@ -27,15 +28,35 @@ public class AutoActionCaptureCubeWithPixy extends AutoAction {
 
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        if (sensor.pixyAvailable == false) return true;
+        if (sensor.pixyAvailable == false) {
+            driveTrain.arcadeDrive(0,0);
+            return true;
+        } 
 
         if (sensor.intakeProxySensor)
         {
             components.intakeArmClamp.set(true);
+            driveTrain.arcadeDrive(0,0);
             return true;
         }
 
-        driveTrain.arcadeDrive(0,0);
+        sensor.getPixyBlocks();
+        if (!sensor.objectDetected) {
+            driveTrain.arcadeDrive(0,0);
+            return true;
+        } 
+
+        if ( (sensor.objectXCoordinate < 143) || (sensor.objectXCoordinate > 163) ) {
+            if (sensor.objectXCoordinate < 143) {
+                driveTrain.arcadeDrive(0,-0.25);
+            }
+            else {
+                driveTrain.arcadeDrive(0.0, -0.25);
+            }
+        }
+        else {
+            driveTrain.arcadeDrive(baseMotorPower,0.0);
+        }
 
         return false;
 
