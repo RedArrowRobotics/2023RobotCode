@@ -122,7 +122,7 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new AutoActionLevelAfterCross());
         autonomousSequence.add(new AutoActionCrossCommunityAfterStation());
         autonomousSequence.add(new AutoActionDriveBackToChgStation());
-        autonomousSequence.add(new AutoActionClimbChargingStation(.5f));
+        autonomousSequence.add(new AutoActionClimbChargingStation(.3f));
         autonomousSequence.add(new AutoActionDoNothing());
         break;
       default:
