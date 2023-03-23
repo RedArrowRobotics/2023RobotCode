@@ -9,6 +9,8 @@ public class ControlInputs {
     private boolean GameMode = false;
     private boolean GameModeCanSwitch = false;
     private boolean GameModeIntakeUse = false;
+    public boolean RepairMode = false;
+    private boolean RepairModeCanSwitch = false;
 
     //Joysticks IDs
     private final int driveStickDeviceId = 0;
@@ -46,9 +48,6 @@ public class ControlInputs {
     public boolean intakeManualModeIn = false;
     public boolean intakePhotoEyesActive = false;
     public boolean intakeGoInside = false;
-
-    //debug
-    public boolean flipper = false;
 
     //Reading the controls
     public final void readControls(ComponentsControl componentsControl) {
@@ -115,10 +114,18 @@ public class ControlInputs {
         }
         SmartDashboard.putBoolean("GameMode", GameMode);
 
+        //Repairmode Toggle
+        if (driveStick.getRawButton(10) && driveStick.getRawButton(8)) {
+            if (RepairModeCanSwitch) {
+                RepairModeCanSwitch = false;
+                RepairMode = !RepairMode;
+            }
+        } else {
+            RepairModeCanSwitch = true;
+        }
+        SmartDashboard.putBoolean("RepairMode", RepairMode);
+
         //Intake Release
         intakeRelease = intakeRelease || beltAuto || dumpBeltLeft || dumpBeltRight;
-
-        //debug
-        flipper = driveStick.getRawButton(8);
     }
 }

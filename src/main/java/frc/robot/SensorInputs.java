@@ -53,7 +53,7 @@ public class SensorInputs {
         
         //Intake
         intakeLimitHome = intakeLimitSwitchHome.get();
-        intakePressure = intakePressureSwitch.get();
+        intakePressure = !intakePressureSwitch.get();
         intakeProxySensor = !intakePhotoEyeSensor.get();
 
         SmartDashboard.putBoolean("Intake Homed", intakeLimitHome);
