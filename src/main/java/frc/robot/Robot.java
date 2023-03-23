@@ -26,7 +26,7 @@ import frc.robot.Auto.AutoActionCaptureCubeWithPixy;
 import frc.robot.Auto.AutoActionHomeIntake;
 import frc.robot.Auto.AutoActionDeployIntake;
 import frc.robot.Auto.AutoActionStraightenToPerpendicular;
-
+import frc.robot.Auto.AutoActionPullIntakeInToUpright;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -144,7 +144,7 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new AutoActionHomeIntake());
         autonomousSequence.add(new AutoActionDeployIntake());
         autonomousSequence.add(new AutoActionCaptureCubeWithPixy());
-        autonomousSequence.add(new AutoActionHomeIntake());
+        autonomousSequence.add(new AutoActionPullIntakeInToUpright());
         autonomousSequence.add(new AutoActionStraightenToPerpendicular());
         autonomousSequence.add(new AutoActionDriveBackToChgStation());
         autonomousSequence.add(new AutoActionClimbChargingStation(.5f));

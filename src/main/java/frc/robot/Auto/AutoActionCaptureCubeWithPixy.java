@@ -51,7 +51,7 @@ public class AutoActionCaptureCubeWithPixy extends AutoAction {
                 driveTrain.arcadeDrive(0,-0.25);
             }
             else {
-                driveTrain.arcadeDrive(0.0, -0.25);
+                driveTrain.arcadeDrive(0.0,0.25);
             }
         }
         else {
