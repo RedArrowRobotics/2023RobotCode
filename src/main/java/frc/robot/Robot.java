@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
   private final String kClimbChargingStation = "Climb Chrg Station";
   private final String kCrossChargingStationAndBack = "Cross Chrg Stat and Back";
   private final String kCrossGetCubeAndBack = "Cross, Get Cube, Back";
+  private final String kAutoCrossCommunityGetCone = "Cross Community, Get Cone";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -78,7 +79,8 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption(kCrossChargingStationAndBack, kCrossChargingStationAndBack);
     if (sensorInputs.pixyAvailable)
     {
-      auto_chooser.addOption(kCrossGetCubeAndBack, kCrossGetCubeAndBack);
+      //auto_chooser.addOption(kCrossGetCubeAndBack, kCrossGetCubeAndBack);
+      auto_chooser.addOption(kAutoCrossCommunityGetCone, kAutoCrossCommunityGetCone);
       //sensorInputs.getPixyBlocks();
     }
     auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
@@ -129,26 +131,36 @@ public class Robot extends TimedRobot {
       case kCrossChargingStationAndBack:
         autonomousSequence.add(new AutoActionFlipper());
         autonomousSequence.add(new AutoActionDriveToChargingStation());
-        autonomousSequence.add(new AutoActionCrossChargingStation());
+        autonomousSequence.add(new AutoActionCrossChargingStation(0.6));
         autonomousSequence.add(new AutoActionLevelAfterCross());
         autonomousSequence.add(new AutoActionCrossCommunityAfterStation());
         autonomousSequence.add(new AutoActionDriveBackToChgStation());
-        autonomousSequence.add(new AutoActionClimbChargingStation(.5f));
+        autonomousSequence.add(new AutoActionClimbChargingStation(.3f));
         autonomousSequence.add(new AutoActionDoNothing());
         break;
       case kCrossGetCubeAndBack:
         autonomousSequence.add(new AutoActionFlipper());
         autonomousSequence.add(new AutoActionDriveToChargingStation());
-        autonomousSequence.add(new AutoActionCrossChargingStation());
+        autonomousSequence.add(new AutoActionCrossChargingStation(0.75));
         autonomousSequence.add(new AutoActionLevelAfterCross());
         autonomousSequence.add(new AutoActionHomeIntake());
         autonomousSequence.add(new AutoActionDeployIntake());
-        autonomousSequence.add(new AutoActionCaptureCubeWithPixy());
+        autonomousSequence.add(new AutoActionCaptureCubeWithPixy(0.4));
         autonomousSequence.add(new AutoActionPullIntakeInToUpright());
-        autonomousSequence.add(new AutoActionStraightenToPerpendicular());
+        //autonomousSequence.add(new AutoActionStraightenToPerpendicular());
         autonomousSequence.add(new AutoActionDriveBackToChgStation());
-        autonomousSequence.add(new AutoActionClimbChargingStation(.5f));
+        autonomousSequence.add(new AutoActionClimbChargingStation(.35f));
         autonomousSequence.add(new AutoActionDoNothing());
+        break;
+      case kAutoCrossCommunityGetCone:
+        autonomousSequence.add(new AutoActionFlipper());
+        autonomousSequence.add(new AutoActionCrossCommunity());
+        autonomousSequence.add(new AutoActionHomeIntake());
+        autonomousSequence.add(new AutoActionDeployIntake());
+        autonomousSequence.add(new AutoActionCaptureCubeWithPixy(0.25));
+        autonomousSequence.add(new AutoActionPullIntakeInToUpright());
+        autonomousSequence.add(new AutoActionDoNothing());
+        break;
       default:
         autonomousSequence.add(new AutoActionDoNothing());
         break;

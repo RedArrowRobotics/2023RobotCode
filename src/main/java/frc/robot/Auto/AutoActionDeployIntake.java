@@ -20,7 +20,7 @@ public class AutoActionDeployIntake extends AutoAction {
         driveTrain.arcadeDrive(0.0,0.0 );
         if (components.intakeEncoder.get() < encoderTarget)
         {
-            components.intakeRotationMotor.set(.4);
+            components.intakeRotationMotor.set(-.8);
             return false;
         }
         else

@@ -16,7 +16,7 @@ public class AutoActionHomeIntake extends AutoAction {
         driveTrain.arcadeDrive(0, 0);
         if (!sensor.intakeLimitHome)
         {
-            components.intakeRotationMotor.set(-0.4);
+            components.intakeRotationMotor.set(0.4);
             return false;
         }
         else

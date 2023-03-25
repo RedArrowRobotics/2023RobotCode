@@ -97,6 +97,8 @@ public class SensorInputs {
             
             byte[] arduinoResponse = pixyPort.read(1);
             
+
+            
             if (arduinoResponse[0] == 0x41) {
                 SmartDashboard.putBoolean("Detected", true);
                 while (pixyPort.getBytesReceived() < 8)

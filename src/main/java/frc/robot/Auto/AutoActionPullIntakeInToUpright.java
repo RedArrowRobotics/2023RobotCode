@@ -7,7 +7,7 @@ import frc.robot.SensorInputs;
 public class AutoActionPullIntakeInToUpright extends AutoAction {
 
     private int encoderTarget;
-    private final int targetDelta = 652;
+    private final int targetDelta = 770;
 
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
@@ -20,7 +20,7 @@ public class AutoActionPullIntakeInToUpright extends AutoAction {
         driveTrain.arcadeDrive(0.0,0.0 );
         if (components.intakeEncoder.get() > encoderTarget)
         {
-            components.intakeRotationMotor.set(-0.4);
+            components.intakeRotationMotor.set(0.8);
             return false;
         }
         else

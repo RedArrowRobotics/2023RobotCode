@@ -6,8 +6,13 @@ import frc.robot.SensorInputs;
 
 public class AutoActionCrossChargingStation extends AutoAction {
 
+    public AutoActionCrossChargingStation(double MaxDrivePower)
+    {
+        maxDrivePower = MaxDrivePower;
+    }
+
     private final float outerPitchLimitInDegrees = 10;
-    private final double maxDrivePower = .6;
+    private final double maxDrivePower;
 
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {

@@ -1,6 +1,5 @@
 package frc.robot.Auto;
 
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import frc.robot.Components;
 import frc.robot.DriveTrain;
 import frc.robot.SensorInputs;
@@ -11,7 +10,11 @@ public class AutoActionCaptureCubeWithPixy extends AutoAction {
     private double initialRightEncoderCount = 0.0;
     private double leftEncoderCountLimit;
     private double rightEncoderCountLimit;
-    private final double baseMotorPower = .25;
+    private final double baseMotorPower;
+
+    public AutoActionCaptureCubeWithPixy(double baseForwardMotorPower) {
+        baseMotorPower = baseForwardMotorPower;
+    }
 
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
