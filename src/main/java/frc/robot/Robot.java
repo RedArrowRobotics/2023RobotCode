@@ -22,7 +22,11 @@ import frc.robot.Auto.AutoActionFlipper;
 import frc.robot.Auto.AutoActionCrossChargingStation;
 import frc.robot.Auto.AutoActionLevelAfterCross;
 import frc.robot.Auto.AutoActionCrossCommunityAfterStation;
-
+import frc.robot.Auto.AutoActionCaptureCubeWithPixy;
+import frc.robot.Auto.AutoActionHomeIntake;
+import frc.robot.Auto.AutoActionDeployIntake;
+import frc.robot.Auto.AutoActionStraightenToPerpendicular;
+import frc.robot.Auto.AutoActionPullIntakeInToUpright;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -49,6 +53,8 @@ public class Robot extends TimedRobot {
   private final String kAutoCrossCommunity = "Cross Community";
   private final String kClimbChargingStation = "Climb Chrg Station";
   private final String kCrossChargingStationAndBack = "Cross Chrg Stat and Back";
+  private final String kCrossGetCubeAndBack = "Cross, Get Cube, Back";
+  private final String kAutoCrossCommunityGetCone = "Cross Community, Get Cone";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -71,9 +77,16 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption(kAutoCrossCommunity, kAutoCrossCommunity);
     auto_chooser.addOption(kClimbChargingStation, kClimbChargingStation);
     auto_chooser.addOption(kCrossChargingStationAndBack, kCrossChargingStationAndBack);
+    if (sensorInputs.pixyAvailable)
+    {
+      //auto_chooser.addOption(kCrossGetCubeAndBack, kCrossGetCubeAndBack);
+      auto_chooser.addOption(kAutoCrossCommunityGetCone, kAutoCrossCommunityGetCone);
+      //sensorInputs.getPixyBlocks();
+    }
     auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
 
     SmartDashboard.putData("Auto Chooser", auto_chooser);
+
   }
 
   /**
@@ -118,11 +131,34 @@ public class Robot extends TimedRobot {
       case kCrossChargingStationAndBack:
         autonomousSequence.add(new AutoActionFlipper());
         autonomousSequence.add(new AutoActionDriveToChargingStation());
-        autonomousSequence.add(new AutoActionCrossChargingStation());
+        autonomousSequence.add(new AutoActionCrossChargingStation(0.6));
         autonomousSequence.add(new AutoActionLevelAfterCross());
         autonomousSequence.add(new AutoActionCrossCommunityAfterStation());
         autonomousSequence.add(new AutoActionDriveBackToChgStation());
         autonomousSequence.add(new AutoActionClimbChargingStation(.3f));
+        autonomousSequence.add(new AutoActionDoNothing());
+        break;
+      case kCrossGetCubeAndBack:
+        autonomousSequence.add(new AutoActionFlipper());
+        autonomousSequence.add(new AutoActionDriveToChargingStation());
+        autonomousSequence.add(new AutoActionCrossChargingStation(0.75));
+        autonomousSequence.add(new AutoActionLevelAfterCross());
+        autonomousSequence.add(new AutoActionHomeIntake());
+        autonomousSequence.add(new AutoActionDeployIntake());
+        autonomousSequence.add(new AutoActionCaptureCubeWithPixy(0.4));
+        autonomousSequence.add(new AutoActionPullIntakeInToUpright());
+        //autonomousSequence.add(new AutoActionStraightenToPerpendicular());
+        autonomousSequence.add(new AutoActionDriveBackToChgStation());
+        autonomousSequence.add(new AutoActionClimbChargingStation(.35f));
+        autonomousSequence.add(new AutoActionDoNothing());
+        break;
+      case kAutoCrossCommunityGetCone:
+        autonomousSequence.add(new AutoActionFlipper());
+        autonomousSequence.add(new AutoActionCrossCommunity());
+        autonomousSequence.add(new AutoActionHomeIntake());
+        autonomousSequence.add(new AutoActionDeployIntake());
+        autonomousSequence.add(new AutoActionCaptureCubeWithPixy(0.25));
+        autonomousSequence.add(new AutoActionPullIntakeInToUpright());
         autonomousSequence.add(new AutoActionDoNothing());
         break;
       default:
@@ -188,7 +224,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
-    sensorInputs.readSensors();
+    //sensorInputs.getPixyBlocks();
   }
 
   /** This function is called once when test mode is enabled. */
